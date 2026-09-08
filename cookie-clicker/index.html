@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cookie Clicker</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(135deg,#fff1c7,#f5c97b);color:#4a2a16;min-height:100vh}header{text-align:center;padding:22px 10px;background:#7b3f1d;color:#fff;box-shadow:0 4px 15px #0003}header h1{margin:0;font-size:clamp(28px,5vw,46px)}header p{margin:6px 0 0;opacity:.85}.wrap{max-width:1100px;margin:auto;padding:20px;display:grid;grid-template-columns:1fr 1.3fr;gap:20px}.panel{background:#fff8e8eF;border:3px solid #8d552f;border-radius:22px;padding:20px;box-shadow:0 8px 25px #63350b22}.count{text-align:center;font-size:clamp(26px,4vw,42px);font-weight:900}.per{display:block;font-size:15px;margin-top:4px;color:#8a5b38}.cookie-area{display:grid;place-items:center;min-height:450px}.cookie{width:min(320px,70vw);aspect-ratio:1;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 30%,#e9a65a,#a94e18 65%,#74300f);box-shadow:inset -20px -25px 30px #5c210d55,0 18px 30px #5b2b0b44;position:relative;transition:transform .08s}.cookie:active{transform:scale(.94)}.chip{position:absolute;width:28px;height:35px;background:#5b2b18;border-radius:45%;box-shadow:inset 4px 4px 5px #0004}.c1{left:24%;top:25%;transform:rotate(20deg)}.c2{left:55%;top:18%;transform:rotate(-15deg)}.c3{left:68%;top:48%;transform:rotate(35deg)}.c4{left:36%;top:57%;transform:rotate(-25deg)}.c5{left:18%;top:67%;transform:rotate(15deg)}.c6{left:50%;top:75%;transform:rotate(-12deg)}.float{position:fixed;pointer-events:none;font-size:28px;font-weight:900;color:#7b3f1d;animation:up .8s ease-out forwards;z-index:10}@keyframes up{to{transform:translateY(-90px);opacity:0}}.shop{display:flex;flex-direction:column;gap:10px}.upgrade{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:2px solid #c58b58;border-radius:14px;background:#fff;cursor:pointer;text-align:left;color:#4a2a16}.upgrade:hover:not(:disabled){background:#fff1d8;transform:translateY(-1px)}.upgrade:disabled{opacity:.48;cursor:not-allowed}.icon{font-size:34px;width:48px;text-align:center}.info{flex:1}.info b{font-size:17px}.price{font-weight:800;color:#9a4c1c}.owned{font-size:12px;color:#8b6a52}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.stat{padding:10px;background:#f4dfbe;border-radius:12px;text-align:center}.reset{margin-top:15px;width:100%;padding:11px;border:0;border-radius:10px;background:#8d552f;color:#fff;cursor:pointer}@media(max-width:760px){.wrap{grid-template-columns:1fr}.cookie-area{min-height:390px}}
+</style>
+</head>
+<body>
+<header><h1>🍪 Cookie Clicker</h1><p>クッキーを焼いて、どこまでも増やそう！</p></header>
+<main class="wrap">
+<section class="panel cookie-area"><div><div class="count"><span id="cookies">0</span> クッキー<span class="per">毎秒 <span id="cps">0</span> 個</span></div><button class="cookie" id="cookie" aria-label="クッキーをクリック"><i class="chip c1"></i><i class="chip c2"></i><i class="chip c3"></i><i class="chip c4"></i><i class="chip c5"></i><i class="chip c6"></i></button></div></section>
+<section class="panel"><h2>🛒 お店</h2><div class="shop" id="shop"></div><div class="stats"><div class="stat">総クリック <b id="clicks">0</b></div><div class="stat">総生産 <b id="total">0</b></div></div><button class="reset" id="reset">セーブをリセット</button></section>
+</main>
+<script>
+const items=[
+{id:'cursor',icon:'👆',name:'カーソル',desc:'自動でクッキーをクリック',base:15,cps:0.1},
+{id:'grandma',icon:'👵',name:'おばあちゃん',desc:'おばあちゃんがクッキーを焼く',base:100,cps:1},
+{id:'farm',icon:'🌾',name:'クッキーファーム',desc:'クッキーの畑を育てる',base:500,cps:5},
+{id:'factory',icon:'🏭',name:'クッキー工場',desc:'大量生産する工場',base:2500,cps:25},
+{id:'lab',icon:'🧪',name:'クッキー研究所',desc:'科学でクッキーを増やす',base:12000,cps:120}
+];
+let save=JSON.parse(localStorage.getItem('cookie-clicker-save')||'null')||{cookies:0,total:0,clicks:0,owned:{}};items.forEach(x=>save.owned[x.id]??=0);
+const $=id=>document.getElementById(id);const fmt=n=>n<1000?Math.floor(n*10)/10:n.toLocaleString('ja-JP',{maximumFractionDigits:1});
+function cps(){return items.reduce((s,x)=>s+(save.owned[x.id]||0)*x.cps,0)}
+function price(x){return Math.floor(x.base*Math.pow(1.15,save.owned[x.id]||0))}
+function render(){ $('cookies').textContent=fmt(save.cookies);$('cps').textContent=fmt(cps());$('clicks').textContent=save.clicks.toLocaleString();$('total').textContent=fmt(save.total);$('shop').innerHTML=items.map(x=>{let p=price(x),o=save.owned[x.id]||0;return `<button class="upgrade" data-id="${x.id}" ${save.cookies<p?'disabled':''}><span class="icon">${x.icon}</span><span class="info"><b>${x.name}</b><br><small>${x.desc}（+${x.cps}/秒）</small><br><span class="price">🍪 ${p.toLocaleString()}</span> <span class="owned">所持 ${o}</span></span></button>`}).join('')}
+function add(n,x,y){save.cookies+=n;save.total+=n;if(x){save.clicks++;float(x,y,'+'+fmt(n))}render()}
+function float(x,y,text){let e=document.createElement('div');e.className='float';e.textContent=text;e.style.left=x+'px';e.style.top=y+'px';document.body.append(e);setTimeout(()=>e.remove(),800)}
+$('cookie').addEventListener('click',e=>add(1,e.clientX,e.clientY));
+$('shop').addEventListener('click',e=>{let b=e.target.closest('.upgrade');if(!b)return;let x=items.find(i=>i.id===b.dataset.id),p=price(x);if(save.cookies>=p){save.cookies-=p;save.owned[x.id]++;render();persist()}});
+$('reset').onclick=()=>{if(confirm('本当にセーブをリセットしますか？')){localStorage.removeItem('cookie-clicker-save');location.reload()}};
+function persist(){localStorage.setItem('cookie-clicker-save',JSON.stringify(save))}
+setInterval(()=>{let n=cps()/10;if(n){save.cookies+=n;save.total+=n;render()}},100);
+setInterval(persist,2000);render();
+</script>
+</body>
+</html>
