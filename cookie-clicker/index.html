@@ -1,40 +1,74 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cookie Clicker</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ultimate Cookie Clicker</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(135deg,#fff1c7,#f5c97b);color:#4a2a16;min-height:100vh}header{text-align:center;padding:22px 10px;background:#7b3f1d;color:#fff;box-shadow:0 4px 15px #0003}header h1{margin:0;font-size:clamp(28px,5vw,46px)}header p{margin:6px 0 0;opacity:.85}.wrap{max-width:1100px;margin:auto;padding:20px;display:grid;grid-template-columns:1fr 1.3fr;gap:20px}.panel{background:#fff8e8eF;border:3px solid #8d552f;border-radius:22px;padding:20px;box-shadow:0 8px 25px #63350b22}.count{text-align:center;font-size:clamp(26px,4vw,42px);font-weight:900}.per{display:block;font-size:15px;margin-top:4px;color:#8a5b38}.cookie-area{display:grid;place-items:center;min-height:450px}.cookie{width:min(320px,70vw);aspect-ratio:1;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 30%,#e9a65a,#a94e18 65%,#74300f);box-shadow:inset -20px -25px 30px #5c210d55,0 18px 30px #5b2b0b44;position:relative;transition:transform .08s}.cookie:active{transform:scale(.94)}.chip{position:absolute;width:28px;height:35px;background:#5b2b18;border-radius:45%;box-shadow:inset 4px 4px 5px #0004}.c1{left:24%;top:25%;transform:rotate(20deg)}.c2{left:55%;top:18%;transform:rotate(-15deg)}.c3{left:68%;top:48%;transform:rotate(35deg)}.c4{left:36%;top:57%;transform:rotate(-25deg)}.c5{left:18%;top:67%;transform:rotate(15deg)}.c6{left:50%;top:75%;transform:rotate(-12deg)}.float{position:fixed;pointer-events:none;font-size:28px;font-weight:900;color:#7b3f1d;animation:up .8s ease-out forwards;z-index:10}@keyframes up{to{transform:translateY(-90px);opacity:0}}.shop{display:flex;flex-direction:column;gap:10px}.upgrade{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:2px solid #c58b58;border-radius:14px;background:#fff;cursor:pointer;text-align:left;color:#4a2a16}.upgrade:hover:not(:disabled){background:#fff1d8;transform:translateY(-1px)}.upgrade:disabled{opacity:.48;cursor:not-allowed}.icon{font-size:34px;width:48px;text-align:center}.info{flex:1}.info b{font-size:17px}.price{font-weight:800;color:#9a4c1c}.owned{font-size:12px;color:#8b6a52}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.stat{padding:10px;background:#f4dfbe;border-radius:12px;text-align:center}.reset{margin-top:15px;width:100%;padding:11px;border:0;border-radius:10px;background:#8d552f;color:#fff;cursor:pointer}@media(max-width:760px){.wrap{grid-template-columns:1fr}.cookie-area{min-height:390px}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(135deg,#fff0c2,#d99a52);color:#482513;min-height:100vh}header{padding:18px;text-align:center;background:#713713;color:#fff;box-shadow:0 4px 18px #0004}header h1{margin:0;font-size:clamp(28px,5vw,48px)}header p{margin:5px 0;opacity:.9}.wrap{max-width:1250px;margin:auto;padding:18px;display:grid;grid-template-columns:minmax(320px,1fr) minmax(340px,1.2fr);gap:18px}.panel{background:#fff9e9ee;border:3px solid #89502b;border-radius:20px;padding:18px;box-shadow:0 8px 25px #5a2d1028}.count{text-align:center;font-size:clamp(24px,4vw,40px);font-weight:900}.per{display:block;font-size:14px;color:#895b3c}.cookie-area{min-height:540px;display:grid;place-items:center}.cookie{width:min(330px,72vw);aspect-ratio:1;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 28%,#f2b36a,#ad501a 62%,#702d10);box-shadow:inset -24px -30px 35px #5c210d55,0 20px 35px #51240855;position:relative;transition:.08s}.cookie:active{transform:scale(.94)}.chip{position:absolute;width:27px;height:34px;background:#542718;border-radius:45%;box-shadow:inset 4px 4px 5px #0004}.c1{left:22%;top:25%;transform:rotate(20deg)}.c2{left:56%;top:18%;transform:rotate(-15deg)}.c3{left:68%;top:48%;transform:rotate(35deg)}.c4{left:36%;top:57%;transform:rotate(-25deg)}.c5{left:18%;top:67%;transform:rotate(15deg)}.c6{left:50%;top:75%;transform:rotate(-12deg)}.golden{position:fixed;right:25px;top:100px;width:82px;height:82px;border-radius:50%;border:4px solid #fff3a0;background:radial-gradient(circle at 30% 25%,#fff59b,#ffc400 45%,#e38b00);font-size:44px;cursor:pointer;box-shadow:0 0 30px #ffd000;z-index:20;animation:pulse 1s infinite}@keyframes pulse{50%{transform:scale(1.12)}}.float{position:fixed;pointer-events:none;font-size:27px;font-weight:900;color:#74370f;animation:up .8s forwards;z-index:30}@keyframes up{to{transform:translateY(-90px);opacity:0}}h2{margin:8px 0 12px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.tab,.action{border:0;border-radius:10px;padding:9px 12px;background:#e6c08c;color:#482513;cursor:pointer;font-weight:700}.tab.active{background:#89502b;color:white}.shop{display:flex;flex-direction:column;gap:9px}.upgrade{display:flex;align-items:center;gap:11px;width:100%;padding:12px;border:2px solid #c58b58;border-radius:13px;background:#fff;cursor:pointer;text-align:left;color:#482513}.upgrade:hover:not(:disabled){background:#fff0d2;transform:translateY(-1px)}.upgrade:disabled{opacity:.45;cursor:not-allowed}.icon{font-size:31px;width:43px;text-align:center}.info{flex:1}.price{font-weight:900;color:#934519}.owned{font-size:12px;color:#80624d}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.card{padding:10px;border-radius:11px;background:#f1dfc2;border:1px solid #d0a66f}.locked{opacity:.45}.done{border-color:#a96b15;background:#ffe5a8}.small{font-size:12px;color:#795c46}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.stat{text-align:center;padding:9px;background:#f1dfc2;border-radius:10px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.action{background:#89502b;color:#fff}.danger{background:#9b3328}.notice{padding:10px;border-radius:10px;background:#fff0c5;margin:8px 0}.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;z-index:50}.modal.show{display:grid}.modalbox{max-width:520px;width:92%;background:#fff9e9;border-radius:18px;padding:22px;border:3px solid #89502b}.modalbox h2{margin-top:0}.bar{height:15px;background:#ddc6a1;border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:#e0a01d;width:0}.footer{text-align:center;padding:12px;opacity:.7}@media(max-width:800px){.wrap{grid-template-columns:1fr}.cookie-area{min-height:430px}.golden{top:auto;bottom:20px;right:20px;width:70px;height:70px;font-size:36px}}
 </style>
 </head>
 <body>
-<header><h1>🍪 Cookie Clicker</h1><p>クッキーを焼いて、どこまでも増やそう！</p></header>
+<header><h1>🍪 Ultimate Cookie Clicker</h1><p>クリック、購入、実績、ゴールデンクッキー、転生まで全部入り！</p></header>
 <main class="wrap">
-<section class="panel cookie-area"><div><div class="count"><span id="cookies">0</span> クッキー<span class="per">毎秒 <span id="cps">0</span> 個</span></div><button class="cookie" id="cookie" aria-label="クッキーをクリック"><i class="chip c1"></i><i class="chip c2"></i><i class="chip c3"></i><i class="chip c4"></i><i class="chip c5"></i><i class="chip c6"></i></button></div></section>
-<section class="panel"><h2>🛒 お店</h2><div class="shop" id="shop"></div><div class="stats"><div class="stat">総クリック <b id="clicks">0</b></div><div class="stat">総生産 <b id="total">0</b></div></div><button class="reset" id="reset">セーブをリセット</button></section>
-</main>
+<section class="panel cookie-area"><div><div class="count"><span id="cookies">0</span> クッキー<span class="per">毎秒 <span id="cps">0</span> 個　｜　クリック +<span id="clickPower">1</span></span></div><button class="cookie" id="cookie" aria-label="クッキーをクリック"><i class="chip c1"></i><i class="chip c2"></i><i class="chip c3"></i><i class="chip c4"></i><i class="chip c5"></i><i class="chip c6"></i></button></div></section>
+<section class="panel"><div class="tabs"><button class="tab active" data-tab="shop">🛒 お店</button><button class="tab" data-tab="upgrades">✨ 強化</button><button class="tab" data-tab="achievements">🏆 実績</button><button class="tab" data-tab="prestige">🌟 転生</button></div>
+<div id="shop" class="tabpage"></div><div id="upgrades" class="tabpage" hidden></div><div id="achievements" class="tabpage" hidden></div><div id="prestige" class="tabpage" hidden></div>
+<div class="stats"><div class="stat">総クリック <b id="clicks">0</b></div><div class="stat">総生産 <b id="total">0</b></div><div class="stat">ゴールデン <b id="goldens">0</b></div><div class="stat">実績 <b id="achcount">0</b></div></div>
+<div class="buttons"><button class="action" id="export">💾 セーブ書き出し</button><button class="action" id="import">📥 セーブ読み込み</button><button class="action danger" id="reset">🗑 リセット</button></div></section>
+</main><div class="footer">自動セーブ：2秒ごと　｜　ブラウザにデータ保存</div>
+<div class="modal" id="modal"><div class="modalbox"><h2>📥 セーブ読み込み</h2><p>書き出したコードを貼り付けてください。</p><textarea id="saveText" style="width:100%;height:150px"></textarea><div class="buttons"><button class="action" id="doImport">読み込む</button><button class="tab" id="closeModal">キャンセル</button></div></div></div>
 <script>
 const items=[
-{id:'cursor',icon:'👆',name:'カーソル',desc:'自動でクッキーをクリック',base:15,cps:0.1},
-{id:'grandma',icon:'👵',name:'おばあちゃん',desc:'おばあちゃんがクッキーを焼く',base:100,cps:1},
-{id:'farm',icon:'🌾',name:'クッキーファーム',desc:'クッキーの畑を育てる',base:500,cps:5},
-{id:'factory',icon:'🏭',name:'クッキー工場',desc:'大量生産する工場',base:2500,cps:25},
-{id:'lab',icon:'🧪',name:'クッキー研究所',desc:'科学でクッキーを増やす',base:12000,cps:120}
+{id:'cursor',icon:'👆',name:'カーソル',desc:'自動でクリック',base:15,cps:.1},
+{id:'grandma',icon:'👵',name:'おばあちゃん',desc:'手作りクッキー',base:100,cps:1},
+{id:'farm',icon:'🌾',name:'クッキーファーム',desc:'畑で栽培',base:500,cps:5},
+{id:'factory',icon:'🏭',name:'クッキー工場',desc:'大量生産',base:2500,cps:25},
+{id:'lab',icon:'🧪',name:'クッキー研究所',desc:'科学の力',base:12000,cps:120},
+{id:'portal',icon:'🌀',name:'クッキーポータル',desc:'異世界から輸入',base:60000,cps:600},
+{id:'machine',icon:'⚙️',name:'時空マシン',desc:'時間から抽出',base:300000,cps:3200}
 ];
-let save=JSON.parse(localStorage.getItem('cookie-clicker-save')||'null')||{cookies:0,total:0,clicks:0,owned:{}};items.forEach(x=>save.owned[x.id]??=0);
-const $=id=>document.getElementById(id);const fmt=n=>n<1000?Math.floor(n*10)/10:n.toLocaleString('ja-JP',{maximumFractionDigits:1});
-function cps(){return items.reduce((s,x)=>s+(save.owned[x.id]||0)*x.cps,0)}
+const upgrades=[
+{id:'strong',name:'強い指',desc:'クリック力 +1',cost:100,click:1},
+{id:'double',name:'黄金の指',desc:'クリック力 ×2',cost:1000,mult:2},
+{id:'sweet',name:'甘い香り',desc:'全自動生産 ×1.25',cost:5000,prod:1.25},
+{id:'mega',name:'メガ工場',desc:'全自動生産 ×2',cost:50000,prod:2},
+{id:'lucky',name:'ラッキー体質',desc:'ゴールデンクッキー報酬 ×2',cost:100000,gold:2},
+{id:'ancient',name:'古代のレシピ',desc:'クリック力 ×5',cost:1000000,mult:5}
+];
+const achievements=[
+{id:'first',name:'はじめの一歩',desc:'1クリック',ok:s=>s.clicks>=1},
+{id:'hundred',name:'クリック職人',desc:'100クリック',ok:s=>s.clicks>=100},
+{id:'thousand',name:'クリックマスター',desc:'1,000クリック',ok:s=>s.clicks>=1000},
+{id:'million',name:'百万長者',desc:'累計100万枚',ok:s=>s.total>=1e6},
+{id:'billion',name:'億万長者',desc:'累計1億枚',ok:s=>s.total>=1e8},
+{id:'tenbuild',name:'大企業',desc:'建物を合計10個購入',ok:s=>Object.values(s.owned).reduce((a,b)=>a+b,0)>=10},
+{id:'golden',name:'黄金の幸運',desc:'ゴールデンクッキー1個',ok:s=>s.goldens>=1},
+{id:'gold10',name:'黄金ハンター',desc:'10個取得',ok:s=>s.goldens>=10},
+{id:'prestige',name:'新たな始まり',desc:'1回転生',ok:s=>s.prestige>=1},
+{id:'rich',name:'クッキー王',desc:'1兆枚に到達',ok:s=>s.total>=1e12}
+];
+const base={cookies:0,total:0,clicks:0,goldens:0,prestige:0,prestigeCookies:0,owned:{},bought:{},ach:{}};let save=JSON.parse(localStorage.getItem('ultimate-cookie-save')||'null')||base;items.forEach(x=>save.owned[x.id]??=0);upgrades.forEach(x=>save.bought[x.id]??=false);achievements.forEach(x=>save.ach[x.id]??=false);
+const $=id=>document.getElementById(id);const fmt=n=>{if(n<1000)return Math.floor(n*10)/10;return n.toLocaleString('ja-JP',{maximumFractionDigits:1})};
+function cps(){let n=items.reduce((a,x)=>a+(save.owned[x.id]||0)*x.cps,0);upgrades.forEach(x=>{if(save.bought[x.id]&&x.prod)n*=x.prod});return n*(1+save.prestige*.1)}
+function clickPower(){let n=1;upgrades.forEach(x=>{if(save.bought[x.id]){if(x.click)n+=x.click;if(x.mult)n*=x.mult}});return n*(1+save.prestige*.05)}
 function price(x){return Math.floor(x.base*Math.pow(1.15,save.owned[x.id]||0))}
-function render(){ $('cookies').textContent=fmt(save.cookies);$('cps').textContent=fmt(cps());$('clicks').textContent=save.clicks.toLocaleString();$('total').textContent=fmt(save.total);$('shop').innerHTML=items.map(x=>{let p=price(x),o=save.owned[x.id]||0;return `<button class="upgrade" data-id="${x.id}" ${save.cookies<p?'disabled':''}><span class="icon">${x.icon}</span><span class="info"><b>${x.name}</b><br><small>${x.desc}（+${x.cps}/秒）</small><br><span class="price">🍪 ${p.toLocaleString()}</span> <span class="owned">所持 ${o}</span></span></button>`}).join('')}
-function add(n,x,y){save.cookies+=n;save.total+=n;if(x){save.clicks++;float(x,y,'+'+fmt(n))}render()}
-function float(x,y,text){let e=document.createElement('div');e.className='float';e.textContent=text;e.style.left=x+'px';e.style.top=y+'px';document.body.append(e);setTimeout(()=>e.remove(),800)}
-$('cookie').addEventListener('click',e=>add(1,e.clientX,e.clientY));
-$('shop').addEventListener('click',e=>{let b=e.target.closest('.upgrade');if(!b)return;let x=items.find(i=>i.id===b.dataset.id),p=price(x);if(save.cookies>=p){save.cookies-=p;save.owned[x.id]++;render();persist()}});
-$('reset').onclick=()=>{if(confirm('本当にセーブをリセットしますか？')){localStorage.removeItem('cookie-clicker-save');location.reload()}};
-function persist(){localStorage.setItem('cookie-clicker-save',JSON.stringify(save))}
-setInterval(()=>{let n=cps()/10;if(n){save.cookies+=n;save.total+=n;render()}},100);
-setInterval(persist,2000);render();
-</script>
-</body>
-</html>
+function persist(){localStorage.setItem('ultimate-cookie-save',JSON.stringify(save))}
+function add(n,x,y){save.cookies+=n;save.total+=n;save.clicks++;float(x,y,'+'+fmt(n));checkAchievements();render()}
+function float(x,y,t){let e=document.createElement('div');e.className='float';e.textContent=t;e.style.left=x+'px';e.style.top=y+'px';document.body.append(e);setTimeout(()=>e.remove(),800)}
+function render(){ $('cookies').textContent=fmt(save.cookies);$('cps').textContent=fmt(cps());$('clickPower').textContent=fmt(clickPower());$('clicks').textContent=save.clicks.toLocaleString();$('total').textContent=fmt(save.total);$('goldens').textContent=save.goldens;$('achcount').textContent=Object.values(save.ach).filter(Boolean).length+'/'+achievements.length;
+$('shop').innerHTML=items.map(x=>{let p=price(x),o=save.owned[x.id]||0;return `<button class="upgrade" data-id="${x.id}" ${save.cookies<p?'disabled':''}><span class="icon">${x.icon}</span><span class="info"><b>${x.name}</b><br><small>${x.desc}（+${x.cps}/秒）</small><br><span class="price">🍪 ${p.toLocaleString()}</span> <span class="owned">所持 ${o}</span></span></button>`}).join('');
+$('upgrades').innerHTML=upgrades.map(x=>`<button class="upgrade" data-up="${x.id}" ${save.bought[x.id]||save.cookies<x.cost?'disabled':''}><span class="icon">✨</span><span class="info"><b>${x.name}</b><br><small>${x.desc}</small><br><span class="price">🍪 ${x.cost.toLocaleString()}</span> ${save.bought[x.id]?'<span class="owned">購入済み</span>':''}</span></button>`).join('');
+$('achievements').innerHTML='<div class="grid">'+achievements.map(x=>`<div class="card ${save.ach[x.id]?'done':'locked'}"><b>${save.ach[x.id]?'🏆':'🔒'} ${x.name}</b><br><span class="small">${x.desc}</span></div>`).join('')+'</div>';
+let need=Math.max(1,Math.floor(save.total/1e6)-save.prestigeCookies);$('prestige').innerHTML=`<div class="notice">転生するとクッキーと建物・強化がリセットされます。その代わり<strong>🌟転生ポイント</strong>を獲得し、永続的に生産+10%、クリック+5%。</div><p>累計生産：<b>${fmt(save.total)}</b></p><p>次の転生で獲得：<b>${Math.floor(save.total/1e6)}</b>ポイント</p><div class="bar"><i style="width:${Math.min(100,(save.total%1e6)/1e4)}%"></i></div><button class="action" style="margin-top:12px" id="prestigeBtn" ${save.total<1e6?'disabled':''}>🌟 転生する</button>`;}
+function checkAchievements(){achievements.forEach(a=>{if(!save.ach[a.id]&&a.ok(save)){save.ach[a.id]=true;float(innerWidth/2,innerHeight/2,'🏆 '+a.name)}})}
+$('cookie').onclick=e=>add(clickPower(),e.clientX,e.clientY);
+$('shop').onclick=e=>{let b=e.target.closest('.upgrade');if(!b)return;let x=items.find(i=>i.id===b.dataset.id),p=price(x);if(save.cookies>=p){save.cookies-=p;save.owned[x.id]++;persist();render()}};
+$('upgrades').onclick=e=>{let b=e.target.closest('.upgrade');if(!b)return;let x=upgrades.find(i=>i.id===b.dataset.up);if(!x||save.bought[x.id]||save.cookies<x.cost)return;save.cookies-=x.cost;save.bought[x.id]=true;persist();render()};
+$('prestige').onclick=e=>{if(e.target.id!=='prestigeBtn'||save.total<1e6)return;if(confirm('転生すると現在のクッキー・建物・強化がリセットされます。転生しますか？')){save.prestige+=Math.floor(save.total/1e6);save.prestigeCookies=save.total;save.cookies=0;save.owned={};save.bought={};items.forEach(x=>save.owned[x.id]=0);upgrades.forEach(x=>save.bought[x.id]=false);persist();render()}};
+document.querySelector('.tabs').onclick=e=>{let b=e.target.closest('.tab');if(!b)return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.tabpage').forEach(x=>x.hidden=true);$(b.dataset.tab).hidden=false};
+$('export').onclick=()=>{persist();navigator.clipboard?.writeText(btoa(unescape(encodeURIComponent(JSON.stringify(save)))));alert('セーブコードをクリップボードにコピーしました！')};
+$('import').onclick=()=>{$('modal').classList.add('show');$('saveText').value=''};$('closeModal').onclick=()=>$('modal').classList.remove('show');$('doImport').onclick=()=>{try{save=JSON.parse(decodeURIComponent(escape(atob($('saveText').value.trim()))));items.forEach(x=>save.owned[x.id]??=0);upgrades.forEach(x=>save.bought[x.id]??=false);achievements.forEach(x=>save.ach[x.id]??=false);persist();location.reload()}catch(e){alert('セーブコードが正しくありません')}};
+$('reset').onclick=()=>{if(confirm('全データを完全に削除しますか？')){localStorage.removeItem('ultimate-cookie-save');location.reload()}};
+setInterval(()=>{let n=cps()/10;if(n){save.cookies+=n;save.total+=n;checkAchievements();render()}},100);setInterval(persist,2000);render();
+let goldenTimer;function spawnGolden(){if(document.querySelector('.golden'))return;let b=document.createElement('button');b.className='golden';b.textContent='🍪';b.title='ゴールデンクッキー！';b.style.top=(90+Math.random()*(innerHeight-180))+'px';b.style.left=(10+Math.random()*(innerWidth-110))+'px';document.body.append(b);b.onclick=()=>{let reward=Math.max(100,save.cookies*.15+cps()*60)* (save.bought.lucky?2:1);save.cookies+=reward;save.total+=reward;save.goldens++;float(b.offsetLeft,b.offsetTop,'✨ +'+fmt(reward));b.remove();checkAchievements();render();goldenTimer=setTimeout(spawnGolden,20000+Math.random()*40000)};setTimeout(()=>{if(b.isConnected)b.remove()},12000)}goldenTimer=setTimeout(spawnGolden,10000);
+</script></body></html>
