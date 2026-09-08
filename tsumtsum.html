@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>つむつむ - Tsum Tsum風ゲーム</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(#ffe9f2,#dff6ff);color:#3b2340;text-align:center}h1{margin:12px 0 4px}.hud{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.pill{background:#fff;border-radius:999px;padding:8px 14px;box-shadow:0 3px 10px #0002;font-weight:700}button{border:0;border-radius:14px;padding:10px 18px;background:#ff77aa;color:white;font-weight:700;cursor:pointer}.game{width:min(94vw,430px);margin:12px auto;position:relative}.board{height:min(125vw,560px);max-height:560px;background:#fff9;border:5px solid #fff;border-radius:28px;box-shadow:0 8px 25px #0002;overflow:hidden;touch-action:none;position:relative}.piece{position:absolute;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:30px;user-select:none;transform:translate(-50%,-50%);box-shadow:inset -5px -7px 0 #0002,0 3px 5px #0002;transition:transform .08s}.selected{outline:5px solid #fff;transform:translate(-50%,-50%) scale(1.12)}.bar{height:14px;background:#fff;border-radius:10px;margin:8px 0;overflow:hidden}.fill{height:100%;background:#ff77aa;width:100%;transition:width .1s}.hint{font-size:13px;color:#765d78}.overlay{position:absolute;inset:0;background:#fffdeccc;display:none;place-items:center;z-index:5}.card{background:#fff;border-radius:25px;padding:25px;box-shadow:0 8px 30px #0003}.combo{font-size:22px;font-weight:800;min-height:30px}.star{position:absolute;font-size:32px;pointer-events:none;animation:pop .55s forwards}@keyframes pop{to{transform:translateY(-70px) scale(1.5);opacity:0}}
+</style></head>
+<body>
+<h1>🧸 つむつむ</h1>
+<div class="hud"><div class="pill">⭐ <span id="score">0</span></div><div class="pill">⏱️ <span id="time">60</span></div><div class="pill">🔥 <span id="combo">0</span> COMBO</div></div>
+<div class="game"><div class="board" id="board"></div><div class="bar"><div class="fill" id="fill"></div></div><div class="combo" id="message"></div><div class="hint">同じツムを3個以上なぞってつなげよう！</div><div class="overlay" id="overlay"><div class="card"><h2>ゲーム終了！</h2><p>スコア：<b id="finalScore">0</b></p><button onclick="startGame()">もう一度遊ぶ</button></div></div></div>
+<button onclick="startGame()">🔄 リスタート</button>
+<script>
+const types=[['🐻','bear'],['🐱','cat'],['🐶','dog'],['🐰','rabbit'],['🐼','panda'],['🦊','fox']];
+const board=document.getElementById('board');let pieces=[],path=[],drag=false,score=0,combo=0,time=60,timer,started=false;
+function rand(a,b){return Math.random()*(b-a)+a} function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function startGame(){clearInterval(timer);score=0;combo=0;time=60;started=true;document.getElementById('score').textContent=0;document.getElementById('combo').textContent=0;document.getElementById('time').textContent=60;document.getElementById('fill').style.width='100%';document.getElementById('overlay').style.display='none';document.getElementById('message').textContent='';makeBoard();timer=setInterval(()=>{time--;document.getElementById('time').textContent=time;document.getElementById('fill').style.width=(time/60*100)+'%';if(time<=0)endGame()},1000)}
+function makeBoard(){board.innerHTML='';pieces=[];let w=board.clientWidth,h=board.clientHeight;for(let i=0;i<60;i++){let t=types[Math.floor(Math.random()*types.length)];let p={id:i,type:t[1],emoji:t[0],x:rand(32,w-32),y:rand(32,h-32),el:null};let el=document.createElement('div');el.className='piece';el.textContent=p.emoji;el.style.left=p.x+'px';el.style.top=p.y+'px';el.dataset.id=i;board.appendChild(el);p.el=el;pieces.push(p)}}
+function pos(e){let r=board.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function nearest(q){let best=null,bd=35;for(const p of pieces){let d=distance(q,p);if(d<bd){bd=d;best=p}}return best}
+function begin(e){if(!started)return;e.preventDefault();drag=true;path=[];let p=nearest(pos(e));if(p)add(p)}
+function move(e){if(!drag)return;e.preventDefault();let p=nearest(pos(e));if(p&&path.indexOf(p)<0&&p.type===path[0]?.type&&distance(pos(e),p)<45)add(p)}
+function add(p){path.push(p);p.el.classList.add('selected');document.getElementById('message').textContent=path.length+'個！'}
+function finish(){if(!drag)return;drag=false;for(const p of path)p.el.classList.remove('selected');if(path.length>=3){let n=path.length;let gain=n*n*10*(1+combo*.25);score+=Math.floor(gain);combo++;document.getElementById('score').textContent=score;document.getElementById('combo').textContent=combo;burst(path[Math.floor(path.length/2)]);path.sort((a,b)=>b.y-a.y);for(const p of path){p.emoji=types[Math.floor(Math.random()*types.length)][0];p.type=types.find(t=>t[0]===p.emoji)[1];p.el.textContent=p.emoji;p.el.style.transform='translate(-50%,-50%) scale(.2)';setTimeout(()=>p.el.style.transform='',80)}document.getElementById('message').textContent=n>=8?'✨ AWESOME!':n>=5?'🔥 GREAT!':'GOOD!'}else{combo=0;document.getElementById('combo').textContent=0;document.getElementById('message').textContent=''}}
+function burst(p){let s=document.createElement('div');s.className='star';s.textContent='⭐';s.style.left=p.x+'px';s.style.top=p.y+'px';board.appendChild(s);setTimeout(()=>s.remove(),600)}
+function endGame(){started=false;clearInterval(timer);document.getElementById('finalScore').textContent=score;document.getElementById('overlay').style.display='grid'}
+board.addEventListener('pointerdown',begin);board.addEventListener('pointermove',move);window.addEventListener('pointerup',finish);startGame();
+</script></body></html>
