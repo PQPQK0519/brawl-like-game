@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Block Blast</title>
+<style>
+:root{--bg:#10152b;--panel:#1a2140;--cell:#242c50;--text:#f7f8ff;--muted:#9ca7cf;--gap:6px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);background:radial-gradient(circle at 50% 0,#26345f 0,#10152b 48%,#090d1c 100%);display:flex;justify-content:center}
+.app{width:min(100%,520px);padding:18px 14px 24px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{font-size:28px;margin:0;font-weight:900;letter-spacing:.5px}
+.badge{font-size:11px;color:#c9d1f7;background:#20294c;border:1px solid #35416e;padding:5px 8px;border-radius:999px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.card{background:rgba(26,33,64,.9);border:1px solid #303a65;border-radius:16px;padding:10px 14px;box-shadow:0 8px 24px #0003}
+.label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.value{font-size:25px;font-weight:850;margin-top:2px}
+#board{display:grid;grid-template-columns:repeat(8,1fr);gap:var(--gap);background:#171e3a;padding:8px;border-radius:18px;border:1px solid #313b65;box-shadow:0 18px 40px #0005;touch-action:none}
+.cell{aspect-ratio:1;border-radius:7px;background:var(--cell);box-shadow:inset 0 1px 1px #ffffff08;transition:transform .08s,filter .08s}
+.cell.filled{box-shadow:inset 0 2px 0 #ffffff35,0 4px 9px #0005}
+.cell.preview{filter:brightness(1.25);transform:scale(.93)}
+.cell.bad{background:#7b3045!important}
+#pieces{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.piece{height:112px;border:1px solid #303a65;border-radius:16px;background:#171e3a;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none}
+.piece.selected{outline:2px solid #fff;box-shadow:0 0 0 4px #ffffff18}
+.shape{display:grid;gap:4px}
+.mini{width:19px;height:19px;border-radius:5px;box-shadow:inset 0 1px #fff4,0 3px 6px #0005}
+.empty{background:transparent!important;box-shadow:none!important}
+.controls{display:flex;gap:10px;margin-top:14px}
+button{flex:1;border:1px solid #3a4775;background:#20294c;color:var(--text);font-weight:800;border-radius:12px;padding:11px;cursor:pointer}
+button:hover{filter:brightness(1.15)} button:active{transform:scale(.98)}
+.help{color:var(--muted);font-size:12px;text-align:center;margin:12px 0 0}
+#toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:#fff;color:#111;padding:14px 20px;border-radius:16px;font-weight:900;opacity:0;pointer-events:none;transition:.2s;z-index:5;box-shadow:0 12px 35px #0008}
+#toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+@media(max-width:380px){:root{--gap:4px}.app{padding:12px 10px}.piece{height:96px}.mini{width:16px;height:16px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>🧱 Block Blast</h1><span class="badge">8 × 8</span></header>
+<div class="stats">
+ <div class="card"><div class="label">Score</div><div id="score" class="value">0</div></div>
+ <div class="card"><div class="label">Best</div><div id="best" class="value">0</div></div>
+</div>
+<div id="board" aria-label="ゲーム盤"></div>
+<div id="pieces"></div>
+<div class="controls"><button id="new">↻ New Game</button><button id="clear">選択解除</button></div>
+<p class="help">ピースを選んで、盤面の置きたいマスをタップ。行・列が埋まると消えます。</p>
+</div>
+<div id="toast"></div>
+<script>
+const N=8, colors=['#5b8cff','#ff5d8f','#37d67a','#ffb52e','#a56cff','#24c7d9'];
+const SHAPES=[
+ [[1]],[[1,1]],[[1,1,1]],[[1,1],[1,1]],[[1,0],[1,1]],[[0,1],[1,1]],
+ [[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,0],[0,1,1]],[[1,0,0],[1,1,1]]
+];
+let board=[], pieces=[], selected=null, score=0, best=Number(localStorage.blockBlastBest||0);
+const $=id=>document.getElementById(id);
+$('best').textContent=best;
+function newGame(){board=Array.from({length:N},()=>Array(N).fill(null));score=0;selected=null;pieces=[makePiece(),makePiece(),makePiece()];render();toast('ゲームスタート！')}
+function makePiece(){const s=SHAPES[Math.floor(Math.random()*SHAPES.length)];return {shape:s,color:colors[Math.floor(Math.random()*colors.length)]}}
+function render(){
+ $('score').textContent=score;$('best').textContent=best;
+ const b=$('board');b.innerHTML='';
+ for(let r=0;r<N;r++)for(let c=0;c<N;c++){const el=document.createElement('div');el.className='cell'+(board[r][c]?' filled':'');if(board[r][c])el.style.background=board[r][c];el.dataset.r=r;el.dataset.c=c;el.onclick=()=>place(r,c);b.appendChild(el)}
+ const ps=$('pieces');ps.innerHTML='';
+ pieces.forEach((p,i)=>{const box=document.createElement('div');box.className='piece'+(selected===i?' selected':'');box.onclick=()=>{selected=selected===i?null:i;render()};const sh=document.createElement('div');sh.className='shape';sh.style.gridTemplateColumns='repeat('+p.shape[0].length+',19px)';p.shape.forEach(row=>row.forEach(v=>{const x=document.createElement('div');x.className='mini '+(!v?'empty':'');if(v)x.style.background=p.color;sh.appendChild(x)}));box.appendChild(sh);ps.appendChild(box)})
+}
+function canPlace(shape,r,c){for(let y=0;y<shape.length;y++)for(let x=0;x<shape[y].length;x++)if(shape[y][x]&&(r+y>=N||c+x>=N||board[r+y][c+x]))return false;return true}
+function place(r,c){
+ if(selected===null)return toast('先にピースを選んでね');
+ const p=pieces[selected];if(!canPlace(p.shape,r,c))return toast('そこには置けません');
+ let cells=0; p.shape.forEach((row,y)=>row.forEach((v,x)=>{if(v){board[r+y][c+x]=p.color;cells++}}));
+ score+=cells*10; const cleared=clearLines(); if(cleared){score+=cleared*cleared*50;toast(cleared+'ライン消去！ +'+(cleared*cleared*50+cells*10))}
+ if(score>best){best=score;localStorage.blockBlastBest=best}
+ pieces.splice(selected,1);selected=null;if(!pieces.length)pieces=[makePiece(),makePiece(),makePiece()];
+ render(); if(!hasMove())setTimeout(()=>toast('GAME OVER — New Gameで再挑戦！'),150);
+}
+function clearLines(){
+ const rows=[],cols=[];
+ for(let r=0;r<N;r++)if(board[r].every(Boolean))rows.push(r);
+ for(let c=0;c<N;c++)if(board.every(row=>row[c]))cols.push(c);
+ [...rows].forEach(r=>{for(let c=0;c<N;c++)board[r][c]=null});
+ [...cols].forEach(c=>{for(let r=0;r<N;r++)board[r][c]=null});
+ return rows.length+cols.length;
+}
+function hasMove(){return pieces.some(p=>{for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(canPlace(p.shape,r,c))return true;return false})}
+let toastTimer;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),900)}
+$('new').onclick=newGame;$('clear').onclick=()=>{selected=null;render()};newGame();
+</script>
+</body>
+</html>
