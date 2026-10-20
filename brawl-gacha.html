@@ -283,7 +283,7 @@ $("redeemBtn").onclick=()=>{
  message.style.color="#15975c";message.textContent=reward.text;input.value="";save();
 };
 $("redeemCode").addEventListener("keydown",e=>{if(e.key==="Enter")$("redeemBtn").click()});
-setInterval(()=>{if((state.battleReadyAt||0)>Date.now()||(state.gemReadyAt||0)>Date.now())render()},1000);
+setInterval(()=>{if(state.wasserCheat){state.coins+=10000;state.gems+=10000;save()}else if((state.battleReadyAt||0)>Date.now()||(state.gemReadyAt||0)>Date.now())render()},1000);
 $("daily").onclick=()=>{if(state.daily)return;state.daily=true;state.coins+=250;state.gems+=2;$("result").classList.add("show");$("resultFace").textContent="🎁";$("resultTag").textContent="ログインボーナス";$("resultTag").style.background="#168cf0";$("resultName").textContent="ボーナスゲット！";$("resultDesc").textContent="250コイン ＋ 2ジェムを獲得！";$("resultExtra").textContent="また明日も遊びに来てね！";save()};
 $("again").onclick=()=>{if(lastMode==="ten")pull("basic");else pull(lastMode)};
 $("reset").onclick=()=>{if(confirm("集めたファイターやコインを全部リセットする？")){state={coins:500,gems:10,pulls:0,pity:20,owned:{},daily:false,chaosDrops:0,battleReadyAt:0,missionClaimed:false,gemReadyAt:0,redeemedCodes:{},wasserCheat:false};$("result").classList.remove("show");save()}};
