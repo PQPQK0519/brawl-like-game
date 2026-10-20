@@ -339,7 +339,7 @@ $("missionClaim").onclick=()=>{if(state.missionClaimed||state.pulls<5)return;sta
 $("redeemBtn").onclick=()=>{
  const input=$("redeemCode"),message=$("redeemMessage"),code=input.value.trim().toUpperCase();
  if(!code){message.style.color="#d9485f";message.textContent="コードを入力してね！";return}
- const rewards={COIN1000:{coins:1000,text:"🪙 1000コインを獲得！"},GEM10:{gems:10,text:"💎 10ジェムを獲得！"},CHAOS3:{chaosDrops:3,text:"🌀 カオスドロップを3個獲得！"},FREEBOX:{coins:500,gems:5,chaosDrops:1,text:"🎁 500コイン・5ジェム・カオスドロップ1個を獲得！"},"ワッサー":{wasserCheat:true,text:"🔥 チート発動！レア以上のキャラクターの抽選ウェイトが99999倍になった！"}};
+ const rewards={COIN1000:{coins:1000,text:"🪙 1000コインを獲得！"},GEM10:{gems:10,text:"💎 10ジェムを獲得！"},CHAOS3:{chaosDrops:3,text:"🌀 カオスドロップを3個獲得！"},FREEBOX:{coins:500,gems:5,chaosDrops:1,text:"🎁 500コイン・5ジェム・カオスドロップ1個を獲得！"},"ワッサー":{wasserCheat:true,text:"🔥 チート発動！レア以上のキャラクターの抽選ウェイトが99999倍になった！"},"田所浩二":{wasserCheat:true,text:"🔥 チート発動！コイン・ジェムが毎秒10000増加＆レジェンド確定！"}};
  if(!rewards[code]){message.style.color="#d9485f";message.textContent="そのコードは使えないよ。コードを確認してね。";return}
  state.redeemedCodes=state.redeemedCodes||{};
  if(state.redeemedCodes[code]){message.style.color="#d9485f";message.textContent="このコードはもう使用済みだよ！";return}
