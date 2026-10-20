@@ -16,7 +16,7 @@
 .panel{background:#f5f7ff;color:var(--ink);border:3px solid #fff;border-radius:22px;padding:17px;box-shadow:0 7px 0 #111d58;margin:16px 0}
 .panel h2{margin:0 0 12px;font-size:21px}.rarities{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.rarity{padding:9px 3px;text-align:center;border-radius:12px;color:white;font-size:12px;font-weight:900;text-shadow:0 1px 3px #0005}.rarity b{display:block;font-size:18px}
 .common{background:#8c9baa}.rare{background:#22a967}.epic{background:#9b55e8}.mythic{background:#ed4e8b}.legend{background:linear-gradient(135deg,#ffb52e,#ff563e)}
-.crates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.crate{border:0;border-radius:18px;padding:14px 8px 13px;cursor:pointer;color:white;font-weight:900;box-shadow:0 6px 0 #0003;transition:transform .12s;min-width:0}.crate:hover{transform:translateY(-3px)}.crate:active{transform:translateY(2px);box-shadow:0 2px 0 #0003}.crate .emoji{display:block;font-size:clamp(34px,7vw,55px);filter:drop-shadow(0 4px 0 #0002)}.crate .name{display:block;font-size:17px;margin:5px 0}.crate small{display:block;font-size:12px;opacity:.95}.green{background:linear-gradient(#41d987,#15975c)}.purple{background:linear-gradient(#bd72ff,#7434cf)}.orange{background:linear-gradient(#ffcf53,#ed7624)}
+.crates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.crate{border:0;border-radius:18px;padding:14px 8px 13px;cursor:pointer;color:white;font-weight:900;box-shadow:0 6px 0 #0003;transition:transform .12s;min-width:0}.crate:hover{transform:translateY(-3px)}.crate:active{transform:translateY(2px);box-shadow:0 2px 0 #0003}.crate .emoji{display:block;font-size:clamp(34px,7vw,55px);filter:drop-shadow(0 4px 0 #0002)}.crate .name{display:block;font-size:17px;margin:5px 0}.crate small{display:block;font-size:12px;opacity:.95}.green{background:linear-gradient(#41d987,#15975c)}.purple{background:linear-gradient(#bd72ff,#7434cf)}.orange{background:linear-gradient(#ffcf53,#ed7624)}.chaos{background:linear-gradient(135deg,#ff4fd8,#793cff 52%,#21d9ff);border:2px solid #fff8}.starr{background:linear-gradient(135deg,#fff4a3,#ffbf24 55%,#e96d1d);color:#552a18;border:2px solid #fff8}.drop-note{font-size:12px;color:#586582;margin:10px 2px 0}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:900;cursor:pointer;background:#182958;color:white;box-shadow:0 4px 0 #0b153e}.btn:disabled{opacity:.4;cursor:not-allowed}.btn.yellow{background:#ffda4d;color:#35254b;box-shadow:0 4px 0 #c18a22}
 .result{display:none;text-align:center;border-radius:18px;padding:18px;margin-top:14px;background:linear-gradient(145deg,#182b68,#304aa5);color:white;border:3px solid #fff8;animation:pop .3s ease}.result.show{display:block}.result .big{font-size:74px;line-height:1.2}.result h3{font-size:28px;margin:6px}.result p{margin:5px}.result .rarityTag{display:inline-block;padding:5px 13px;border-radius:30px;font-weight:950}
 @keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
@@ -60,7 +60,7 @@
 .open-stage h2{font-size:clamp(24px,6vw,34px);margin:5px 0 3px;text-shadow:0 3px #101a43}
 .open-stage p{margin:7px 0 15px;color:#e3eaff;font-weight:800}
 .tap-crate{width:160px;height:150px;margin:14px auto 18px;display:grid;place-items:center;cursor:pointer;position:relative;filter:drop-shadow(0 12px 0 #090e2c66);animation:crateBob 1.2s ease-in-out infinite;user-select:none}
-.tap-crate[data-mode="chaos"] .crate-box{background:linear-gradient(135deg,#ff72ee,#8c3cff 50%,#1ce5ff);border-color:#48238c}.tap-crate[data-mode="chaos"] .crate-lid{background:linear-gradient(#ffb4fb,#9c57ff);border-color:#48238c}.tap-crate[data-mode="starr"] .crate-box{background:linear-gradient(135deg,#fff4a0,#ffc32d 55%,#e97718);border-color:#9c5314}.tap-crate[data-mode="starr"] .crate-lid{background:linear-gradient(#fff8b9,#ffc12e);border-color:#9c5314}.tap-crate[data-mode="super"] .crate-box{background:linear-gradient(135deg,#d8a2ff,#8b45df,#5721a5);border-color:#492180}.tap-crate[data-mode="super"] .crate-lid{background:linear-gradient(#eac9ff,#a35aff);border-color:#492180}.tap-crate[data-mode="mega"] .crate-box{background:linear-gradient(135deg,#8ceaff,#268ee9,#2450b4);border-color:#173c80}.tap-crate[data-mode="mega"] .crate-lid{background:linear-gradient(#b7f3ff,#55b8ff);border-color:#173c80}.tap-crate .crate-box{width:126px;height:100px;position:absolute;bottom:8px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(135deg,#ffcf53 0%,#ff9a26 45%,#d94e22 100%);box-shadow:inset 0 7px #fff5,inset 0 -8px #8d2b1b88}
+.tap-crate[data-mode="chaos"] .crate-box{background:linear-gradient(135deg,#ff72ee,#8c3cff 50%,#1ce5ff);border-color:#48238c}.tap-crate[data-mode="chaos"] .crate-lid{background:linear-gradient(#ffb4fb,#9c57ff);border-color:#48238c}.tap-crate[data-mode="starr"] .crate-box{background:linear-gradient(135deg,#fff4a0,#ffc32d 55%,#e97718);border-color:#9c5314}.tap-crate[data-mode="starr"] .crate-lid{background:linear-gradient(#fff8b9,#ffc12e);border-color:#9c5314}.tap-crate[data-mode="super"] .crate-box{background:linear-gradient(135deg,#d8a2ff,#8b45df,#5721a5);border-color:#492180}.tap-crate[data-mode="super"] .crate-lid{background:linear-gradient(#eac9ff,#a35aff);border-color:#492180}.tap-crate[data-mode="mega"] .crate-box{background:linear-gradient(135deg,#8ceaff,#268ee9,#2450b4);border-color:#173c80}.tap-crate[data-mode="mega"] .crate-lid{background:linear-gradient(#b7f3ff,#55b8ff);border-color:#173c80}.tap-crate[data-mode="chaos"] .crate-box{background:linear-gradient(135deg,#ff72ee,#8c3cff 50%,#1ce5ff);border-color:#48238c}.tap-crate[data-mode="chaos"] .crate-lid{background:linear-gradient(#ffb4fb,#9c57ff);border-color:#48238c}.tap-crate[data-mode="starr"] .crate-box{background:linear-gradient(135deg,#fff4a0,#ffc32d 55%,#e97718);border-color:#9c5314}.tap-crate[data-mode="starr"] .crate-lid{background:linear-gradient(#fff8b9,#ffc12e);border-color:#9c5314}.tap-crate[data-mode="super"] .crate-box{background:linear-gradient(135deg,#d8a2ff,#8b45df,#5721a5);border-color:#492180}.tap-crate[data-mode="super"] .crate-lid{background:linear-gradient(#eac9ff,#a35aff);border-color:#492180}.tap-crate[data-mode="mega"] .crate-box{background:linear-gradient(135deg,#8ceaff,#268ee9,#2450b4);border-color:#173c80}.tap-crate[data-mode="mega"] .crate-lid{background:linear-gradient(#b7f3ff,#55b8ff);border-color:#173c80}.tap-crate .crate-box{width:126px;height:100px;position:absolute;bottom:8px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(135deg,#ffcf53 0%,#ff9a26 45%,#d94e22 100%);box-shadow:inset 0 7px #fff5,inset 0 -8px #8d2b1b88}
 .tap-crate .crate-box:before{content:"";position:absolute;left:42%;top:0;height:100%;width:15px;background:#ffe67b;border-left:3px solid #fff8;border-right:3px solid #a54b1a}
 .tap-crate .crate-box:after{content:"★";position:absolute;inset:16px 0 0;display:grid;place-items:center;font-size:37px;color:#fff8;text-shadow:0 3px #b84a24}
 .tap-crate .crate-lid{position:absolute;z-index:2;top:16px;width:142px;height:38px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(#ffe77a,#ffad31);box-shadow:inset 0 5px #fff8}
@@ -88,7 +88,9 @@
 <button class="crate green" id="basic"><span class="emoji">📦</span><span class="name">ノーマル箱</span><small>🪙 100コイン</small></button>
 <button class="crate purple" id="super"><span class="emoji">🎁</span><span class="name">スーパー箱</span><small>💎 3ジェム</small></button>
 <button class="crate orange" id="mega"><span class="emoji">💎</span><span class="name">メガ箱</span><small>🪙 400コイン</small></button>
-</div><div class="actions"><button class="btn yellow" id="ten">🔥 10連ガチャ（900コイン）</button><button class="btn" id="daily">🎁 無料ボーナスを受け取る</button></div>
+<button class="crate chaos" id="chaos"><span class="emoji">🌀</span><span class="name">カオスドロップ</span><small>🪙 250コイン</small></button>
+<button class="crate starr" id="starr"><span class="emoji">🌟</span><span class="name">スタードロップ</span><small>🪙 150コイン</small></button>
+</div><p class="drop-note">🌀 カオスドロップは追加報酬がランダム！ 🌟 スタードロップはレア度がランダムで決まるよ。</p><div class="actions"><button class="btn yellow" id="ten">🔥 10連ガチャ（900コイン）</button><button class="btn" id="daily">🎁 無料ボーナスを受け取る</button></div>
 <div class="result" id="result" aria-live="polite"><div class="big" id="resultFace">🎉</div><div id="resultTag" class="rarityTag">レア！</div><h3 id="resultName">ファイター名</h3><p id="resultDesc">説明</p><p id="resultExtra"></p><div class="actions" style="justify-content:center"><button class="btn yellow" id="again">もう一回！</button></div></div></section>
 <section class="panel"><h2>🏆 ファイター図鑑</h2><p style="margin-top:-4px;color:#65708b;font-size:13px">同じファイターが出るとパワーアップ！ 集めてコンプリートしよう。</p><div id="collection" class="collection"><div class="empty">ガチャを引いてファイターを集めよう！</div></div><div class="actions"><button class="btn" id="reset">データをリセット</button></div></section>
 <div class="footer">ファン制作のオリジナルガチャゲームです。公式のブロスタとは関係ありません。</div>
@@ -145,7 +147,7 @@ function save(){try{localStorage.setItem("brawlGachaSave",JSON.stringify(state))
 function render(){
 $("coins").textContent=state.coins;$("gems").textContent=state.gems;$("pulls").textContent=state.pulls;
 $("pity").textContent=state.pity;$("owned").textContent=Object.keys(state.owned).length;
-$("basic").disabled=state.coins<100;$("super").disabled=state.gems<3;$("mega").disabled=state.coins<400;$("ten").disabled=state.coins<900;
+$("basic").disabled=state.coins<100;$("super").disabled=state.gems<3;$("mega").disabled=state.coins<400;$("chaos").disabled=state.coins<250;$("starr").disabled=state.coins<150;$("ten").disabled=state.coins<900;
 $("daily").disabled=state.daily;$("daily").textContent=state.daily?"✅ 今日のボーナス受取済み":"🎁 無料ボーナスを受け取る";
 const list=$("collection");list.innerHTML="";
 const got=fighters.filter(f=>state.owned[f.name]);
@@ -172,13 +174,16 @@ function fighterArt(f){
 function weightedPick(pool){let total=pool.reduce((s,f)=>s+f.weight,0),n=Math.random()*total;for(const f of pool){n-=f.weight;if(n<=0)return f}return pool[pool.length-1]}
 let lastMode="basic";
 function pull(mode){
-if(mode==="basic"&&state.coins<100||mode==="mega"&&state.coins<400||mode==="super"&&state.gems<3){return}
-if(mode==="basic")state.coins-=100;if(mode==="mega")state.coins-=400;if(mode==="super")state.gems-=3;
-let pool=fighters.slice(),bonus=mode==="super"||mode==="mega";
-if(bonus)pool=fighters.filter(f=>["レア","エピック","ミシック","レジェンド"].includes(f.rarity));
+const costs={basic:100,mega:400,chaos:250,starr:150};
+if(mode==="super"&&state.gems<3)return;if(costs[mode]&&state.coins<costs[mode])return;
+if(mode==="super")state.gems-=3;else if(costs[mode])state.coins-=costs[mode];
+let pool=fighters.slice();
+if(mode==="super"||mode==="mega")pool=fighters.filter(f=>["レア","エピック","ミシック","レジェンド"].includes(f.rarity));
+if(mode==="chaos")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
+if(mode==="starr"){const roll=Math.random();const target=roll<.48?"ノーマル":roll<.78?"レア":roll<.93?"エピック":roll<.99?"ミシック":"レジェンド";pool=fighters.filter(f=>f.rarity===target)}
 let f;
-if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}
-else{f=weightedPick(pool);state.pity--}
+if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
+state.chaosBonus="";if(mode==="chaos"){const bonus=Math.random();if(bonus<.25){const g=1+Math.floor(Math.random()*3);state.gems+=g;state.chaosBonus="💎 追加 "+g+"ジェム！"}else if(bonus<.55){const c=100+Math.floor(Math.random()*201);state.coins+=c;state.chaosBonus="🪙 追加 "+c+"コイン！"}else state.chaosBonus="追加報酬なし！";}
 state.pulls++;const duplicate=!!state.owned[f.name];state.owned[f.name]=(state.owned[f.name]||0)+1;
 if(duplicate){const reward={"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[f.rarity];state.coins+=reward}
 lastMode=mode;showResult(f,duplicate);save()
@@ -192,6 +197,8 @@ function showResult(f,duplicate){
  if(f.rarity==="レジェンド")$("resultExtra").textContent="🎊 超激レア！！ おめでとう！ 🎊";
  pendingFighter=f;pendingDuplicate=duplicate;
  const overlay=$("revealOverlay"),card=$("revealCard");card.style.setProperty("--rarity",f.color);
+ const dropNames={basic:"ノーマルボックス",super:"スーパーボックス",mega:"メガボックス",chaos:"カオスドロップ",starr:"スタードロップ",ten:"10連ボックス"};
+ const dm=lastMode||"basic";$("tapCrate").dataset.mode=dm;$("openStage").querySelector(".reveal-kicker").textContent=dropNames[dm]||"MYSTERY DROP";
  overlay.classList.remove("legendary");overlay.classList.add("active");$("openStage").style.display="block";card.style.display="none";
  $("openTitle").textContent=f.rarity==="レジェンド"?"うわっ！金色の箱だ！！":"箱をタップ！";
  $("openSubtitle").textContent=f.rarity==="レジェンド"?"超激レアの予感…！":"中からファイターが出てくるよ…";
@@ -207,7 +214,7 @@ function openPendingFighter(){
   const overlay=$("revealOverlay");if(f.rarity==="レジェンド")overlay.classList.add("legendary");
   $("revealAvatar").innerHTML=fighterArt(f);$("revealName").textContent=f.name;$("revealDesc").textContent=f.desc;
   $("revealRarity").textContent="✦ "+f.rarity.toUpperCase()+" ✦";$("revealRarity").style.background=f.color;
-  $("revealPower").textContent=pendingDuplicate?"かぶり！ パワー "+state.owned[f.name]+" にアップ！":"✨ 新しいファイターをゲット！";
+  $("revealPower").textContent=(pendingDuplicate?"かぶり！ パワー "+state.owned[f.name]+" にアップ！":"✨ 新しいファイターをゲット！")+(state.chaosBonus?"　"+state.chaosBonus:"");
   $("revealContinue").textContent="OK！ コレクションを見る";
  },1250);
 }
@@ -218,7 +225,7 @@ $("revealContinue").onclick=()=>{$("revealOverlay").classList.remove("active");$
 $("revealOverlay").addEventListener("click",e=>{if(e.target===$("revealOverlay")){$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary")}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary")}});
 
-$("basic").onclick=()=>pull("basic");$("super").onclick=()=>pull("super");$("mega").onclick=()=>pull("mega");
+$("basic").onclick=()=>{lastMode="basic";pull("basic")};$("super").onclick=()=>{lastMode="super";pull("super")};$("mega").onclick=()=>{lastMode="mega";pull("mega")};$("chaos").onclick=()=>{lastMode="chaos";pull("chaos")};$("starr").onclick=()=>{lastMode="starr";pull("starr")};
 $("ten").onclick=()=>{
 if(state.coins<900)return;state.coins-=900;let results=[];
 for(let i=0;i<10;i++){let pool=fighters;let f;if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
