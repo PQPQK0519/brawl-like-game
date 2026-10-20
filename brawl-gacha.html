@@ -60,7 +60,7 @@
 .open-stage h2{font-size:clamp(24px,6vw,34px);margin:5px 0 3px;text-shadow:0 3px #101a43}
 .open-stage p{margin:7px 0 15px;color:#e3eaff;font-weight:800}
 .tap-crate{width:160px;height:150px;margin:14px auto 18px;display:grid;place-items:center;cursor:pointer;position:relative;filter:drop-shadow(0 12px 0 #090e2c66);animation:crateBob 1.2s ease-in-out infinite;user-select:none}
-.tap-crate .crate-box{width:126px;height:100px;position:absolute;bottom:8px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(135deg,#ffcf53 0%,#ff9a26 45%,#d94e22 100%);box-shadow:inset 0 7px #fff5,inset 0 -8px #8d2b1b88}
+.tap-crate[data-mode="chaos"] .crate-box{background:linear-gradient(135deg,#ff72ee,#8c3cff 50%,#1ce5ff);border-color:#48238c}.tap-crate[data-mode="chaos"] .crate-lid{background:linear-gradient(#ffb4fb,#9c57ff);border-color:#48238c}.tap-crate[data-mode="starr"] .crate-box{background:linear-gradient(135deg,#fff4a0,#ffc32d 55%,#e97718);border-color:#9c5314}.tap-crate[data-mode="starr"] .crate-lid{background:linear-gradient(#fff8b9,#ffc12e);border-color:#9c5314}.tap-crate[data-mode="super"] .crate-box{background:linear-gradient(135deg,#d8a2ff,#8b45df,#5721a5);border-color:#492180}.tap-crate[data-mode="super"] .crate-lid{background:linear-gradient(#eac9ff,#a35aff);border-color:#492180}.tap-crate[data-mode="mega"] .crate-box{background:linear-gradient(135deg,#8ceaff,#268ee9,#2450b4);border-color:#173c80}.tap-crate[data-mode="mega"] .crate-lid{background:linear-gradient(#b7f3ff,#55b8ff);border-color:#173c80}.tap-crate .crate-box{width:126px;height:100px;position:absolute;bottom:8px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(135deg,#ffcf53 0%,#ff9a26 45%,#d94e22 100%);box-shadow:inset 0 7px #fff5,inset 0 -8px #8d2b1b88}
 .tap-crate .crate-box:before{content:"";position:absolute;left:42%;top:0;height:100%;width:15px;background:#ffe67b;border-left:3px solid #fff8;border-right:3px solid #a54b1a}
 .tap-crate .crate-box:after{content:"★";position:absolute;inset:16px 0 0;display:grid;place-items:center;font-size:37px;color:#fff8;text-shadow:0 3px #b84a24}
 .tap-crate .crate-lid{position:absolute;z-index:2;top:16px;width:142px;height:38px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(#ffe77a,#ffad31);box-shadow:inset 0 5px #fff8}
@@ -181,7 +181,7 @@ if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェ�
 else{f=weightedPick(pool);state.pity--}
 state.pulls++;const duplicate=!!state.owned[f.name];state.owned[f.name]=(state.owned[f.name]||0)+1;
 if(duplicate){const reward={"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[f.rarity];state.coins+=reward}
-showResult(f,duplicate);lastMode=mode;save()
+lastMode=mode;showResult(f,duplicate);save()
 }
 
 let pendingFighter=null,pendingDuplicate=false;
@@ -224,7 +224,7 @@ if(state.coins<900)return;state.coins-=900;let results=[];
 for(let i=0;i<10;i++){let pool=fighters;let f;if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.pulls++;const dup=!!state.owned[f.name];state.owned[f.name]=(state.owned[f.name]||0)+1;if(dup)state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[f.rarity]);results.push(f)}
 const best=results.reduce((a,b)=>fighters.indexOf(a)>fighters.indexOf(b)?a:b);
-showResult(best,false);$("resultExtra").textContent="10連結果："+results.map(f=>f.face+f.name).join(" / ");lastMode="ten";save()
+lastMode="ten";showResult(best,false);$("resultExtra").textContent="10連結果："+results.map(f=>f.face+f.name).join(" / ");save()
 };
 $("daily").onclick=()=>{if(state.daily)return;state.daily=true;state.coins+=250;state.gems+=2;$("result").classList.add("show");$("resultFace").textContent="🎁";$("resultTag").textContent="ログインボーナス";$("resultTag").style.background="#168cf0";$("resultName").textContent="ボーナスゲット！";$("resultDesc").textContent="250コイン ＋ 2ジェムを獲得！";$("resultExtra").textContent="また明日も遊びに来てね！";save()};
 $("again").onclick=()=>{if(lastMode==="ten")pull("basic");else pull(lastMode)};
