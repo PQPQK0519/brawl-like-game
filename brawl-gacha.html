@@ -14,8 +14,8 @@
 .hero h1{margin:0;font-size:clamp(25px,5vw,42px);font-weight:1000;text-shadow:0 4px #173b93}.hero p{margin:8px 0 0;font-weight:750}
 .stats{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:14px}.stat{background:#101e54aa;border-radius:12px;padding:8px 12px;font-weight:850}
 .panel{background:#f5f7ff;color:var(--ink);border:3px solid #fff;border-radius:22px;padding:17px;box-shadow:0 7px 0 #111d58;margin:16px 0}
-.panel h2{margin:0 0 12px;font-size:21px}.rarities{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.rarity{padding:9px 3px;text-align:center;border-radius:12px;color:white;font-size:12px;font-weight:900;text-shadow:0 1px 3px #0005}.rarity b{display:block;font-size:18px}
-.common{background:#8c9baa}.rare{background:#22a967}.epic{background:#9b55e8}.mythic{background:#ed4e8b}.legend{background:linear-gradient(135deg,#ffb52e,#ff563e)}
+.panel h2{margin:0 0 12px;font-size:21px}.rarities{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:7px}.rarity{padding:9px 3px;text-align:center;border-radius:12px;color:white;font-size:12px;font-weight:900;text-shadow:0 1px 3px #0005}.rarity b{display:block;font-size:18px}
+.common{background:#8c9baa}.rare{background:#22a967}.epic{background:#9b55e8}.mythic{background:#ed4e8b}.legend{background:linear-gradient(135deg,#ffb52e,#ff563e)}.ultra{background:linear-gradient(135deg,#00e5ff,#1466ff)}.god{background:linear-gradient(135deg,#fff176,#ff9800,#ff3df2)}.secret{background:linear-gradient(135deg,#ff3df2,#38106f,#080817);box-shadow:0 0 12px #ff3df2}
 .crates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.crate{border:0;border-radius:18px;padding:14px 8px 13px;cursor:pointer;color:white;font-weight:900;box-shadow:0 6px 0 #0003;transition:transform .12s;min-width:0}.crate:hover{transform:translateY(-3px)}.crate:active{transform:translateY(2px);box-shadow:0 2px 0 #0003}.crate .emoji{display:block;font-size:clamp(34px,7vw,55px);filter:drop-shadow(0 4px 0 #0002)}.crate .name{display:block;font-size:17px;margin:5px 0}.crate small{display:block;font-size:12px;opacity:.95}.green{background:linear-gradient(#41d987,#15975c)}.purple{background:linear-gradient(#bd72ff,#7434cf)}.orange{background:linear-gradient(#ffcf53,#ed7624)}.chaos{background:linear-gradient(135deg,#ff4fd8,#793cff 52%,#21d9ff);border:2px solid #fff8}.starr{background:linear-gradient(135deg,#fff4a3,#ffbf24 55%,#e96d1d);color:#552a18;border:2px solid #fff8}.drop-note{font-size:12px;color:#586582;margin:10px 2px 0}.earn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.earn-card{border-radius:15px;background:#e8efff;border:2px solid #cbd8ff;padding:13px}.earn-card h3{margin:0 0 6px;font-size:17px}.earn-card p{margin:0 0 10px;color:#53617e;font-size:13px}.earn-reward{font-weight:1000;color:#137a4a}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:900;cursor:pointer;background:#182958;color:white;box-shadow:0 4px 0 #0b153e}.btn:disabled{opacity:.4;cursor:not-allowed}.btn.yellow{background:#ffda4d;color:#35254b;box-shadow:0 4px 0 #c18a22}
 .result{display:none;text-align:center;border-radius:18px;padding:18px;margin-top:14px;background:linear-gradient(145deg,#182b68,#304aa5);color:white;border:3px solid #fff8;animation:pop .3s ease}.result.show{display:block}.result .big{font-size:74px;line-height:1.2}.result h3{font-size:28px;margin:6px}.result p{margin:5px}.result .rarityTag{display:inline-block;padding:5px 13px;border-radius:30px;font-weight:950}
@@ -83,7 +83,7 @@
 <body><main class="wrap">
 <header class="top"><div class="logo">⭐ BRAWL <span>GACHA!</span></div><div class="pill">🪙 コイン <span id="coins">500</span></div><div class="pill">💎 ジェム <span id="gems">10</span></div></header>
 <section class="hero"><h1>最強ファイターをゲット！</h1><p>ガチャを引いて、キミだけのチームを作ろう！</p><div class="stats"><div class="stat">👊 所持ファイター <span id="owned">0</span>/18</div><div class="stat">🎟️ ガチャ回数 <span id="pulls">0</span></div><div class="stat">✨ 天井まで <span id="pity">20</span> 回</div></div></section>
-<section class="panel"><h2>🎯 レアリティ</h2><div class="rarities"><div class="rarity common"><b>⚪</b>ノーマル</div><div class="rarity rare"><b>🟢</b>レア</div><div class="rarity epic"><b>🟣</b>エピック</div><div class="rarity mythic"><b>💗</b>ミシック</div><div class="rarity legend"><b>🟡</b>レジェンド</div></div></section>
+<section class="panel"><h2>🎯 レアリティ</h2><div class="rarities"><div class="rarity common"><b>⚪</b>ノーマル</div><div class="rarity rare"><b>🟢</b>レア</div><div class="rarity epic"><b>🟣</b>エピック</div><div class="rarity mythic"><b>💗</b>ミシック</div><div class="rarity legend"><b>🟡</b>レジェンド</div><div class="rarity ultra cheat-rarity"><b>🔷</b>ウルトラ</div><div class="rarity god cheat-rarity"><b>👑</b>神</div><div class="rarity secret cheat-rarity"><b>👁️</b>シークレット</div></div><p class="drop-note">🔒 ウルトラ・神・シークレットはチートコードを入力した人だけが入手できます！</p></section>
 <section class="panel"><h2>🎁 ガチャを選ぼう</h2><div class="crates">
 <button class="crate green" id="basic"><span class="emoji">📦</span><span class="name">ノーマル箱</span><small>🪙 100コイン</small></button>
 <button class="crate purple" id="super"><span class="emoji">🎁</span><span class="name">スーパー箱</span><small>💎 3ジェム</small></button>
@@ -147,6 +147,9 @@ const fighters=[
 {name:"キング",face:"👑",rarity:"レジェンド",desc:"王者の風格を持つ最強候補。",color:"#ff9e24",weight:2},
 {name:"ギャラクシー",face:"🌌",rarity:"レジェンド",desc:"宇宙のエネルギーを操る。",color:"#ff9e24",weight:1.5},
 {name:"ゴールデンベア",face:"🐻",rarity:"レジェンド",desc:"めったに出会えない黄金の王者！",color:"#ff9e24",weight:1},
+{name:"オメガ",face:"♾️",rarity:"ウルトラ",desc:"チートコードを入力した者だけが出会える究極の戦士。",color:"#00e5ff",weight:5},
+{name:"創造神",face:"🌌",rarity:"神",desc:"世界そのものを作り変える、選ばれし者の力。",color:"#ffdf45",weight:3},
+{name:"裏ボス・ゼロ",face:"👁️",rarity:"シークレット",desc:"チートコードの先に隠された最終存在。",color:"#ff3df2",weight:1},
 {name:"ピクセル",face:"👾",rarity:"ノーマル",desc:"デジタル世界から飛び出した小さな戦士。",color:"#8c9baa",weight:27},
 {name:"タコス",face:"🌮",rarity:"ノーマル",desc:"スパイシーな弾を連射する陽気なファイター。",color:"#8c9baa",weight:25},
 {name:"モグラ",face:"🐹",rarity:"ノーマル",desc:"地面にもぐって奇襲を仕掛ける。",color:"#8c9baa",weight:24},
@@ -250,7 +253,7 @@ function fighterArt(f){
  const palettes={"ボルト":["#5de4ff","#1974b9","#123b70"],"ニンジャ":["#8b91a8","#343b5b","#171a2b"],"ロッキー":["#ffb36c","#c94d3e","#6c2433"],"ミミ":["#ffd2f2","#d85ca8","#7c337c"],"パイロ":["#ffcc66","#e85b31","#772a30"],"スパーク":["#ffe56b","#f1a51d","#7748b8"],"ジェット":["#a4f4ff","#3995dc","#273f8d"],"グミ":["#ffb3ed","#ef5aab","#8d398e"],"シャーク":["#8cecff","#3b91b5","#174466"],"メカウルフ":["#d0d8ff","#626b96","#292d55"],"マジシャン":["#e4b3ff","#8c51cf","#442a7f"],"アイス":["#d7faff","#73c9ed","#2b5d9a"],"フェニックス":["#ffbe8a","#e34a59","#81264b"],"シャドウ":["#a8b1d4","#45446f","#19172f"],"ドラゴン":["#a7ffb1","#36a36e","#18543f"],"キング":["#ffe88a","#d99422","#6d3b15"],"ギャラクシー":["#d4b6ff","#8c5fe7","#3b267f"],"ゴールデンベア":["#ffe7a0","#c67b22","#704013"]};
  const p=palettes[f.name]||["#b8e7ff","#418acb","#243c70"],seed=Math.max(0,fighters.indexOf(f)),helmet=seed%4;
  let accessory="";
- if(f.rarity==="レジェンド")accessory='<path d="M34 49 L45 24 L56 49 L69 27 L74 53" fill="#ffe879" stroke="#a75c1a" stroke-width="3"/>';
+ if(["レジェンド","ウルトラ","神","シークレット"].includes(f.rarity))accessory='<path d="M34 49 L45 24 L56 49 L69 27 L74 53" fill="#ffe879" stroke="#a75c1a" stroke-width="3"/>';
  else if(f.rarity==="ミシック")accessory='<path d="M25 48 Q45 8 65 48" fill="none" stroke="#ffdf78" stroke-width="5"/>';
  else if(f.rarity==="エピック")accessory='<path d="M27 42 L20 20 L39 31 L45 13 L51 31 L70 20 L63 44" fill="'+p[1]+'" stroke="#fff8" stroke-width="2"/>';
  const eye=f.name==="シャドウ"?"#d5e8ff":"#17253d";
@@ -262,13 +265,13 @@ function fighterArt(f){
  '<ellipse cx="35" cy="53" rx="7" ry="9" fill="#f8fbff"/><ellipse cx="55" cy="53" rx="7" ry="9" fill="#f8fbff"/><ellipse cx="37" cy="54" rx="3.6" ry="5.4" fill="'+eye+'"/><ellipse cx="53" cy="54" rx="3.6" ry="5.4" fill="'+eye+'"/><circle cx="38" cy="52" r="1.5" fill="#fff"/><circle cx="54" cy="52" r="1.5" fill="#fff"/>'+mouth+accessory+'<path d="M26 38 Q45 23 64 38" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="4"/><ellipse cx="28" cy="26" rx="17" ry="22" fill="url(#shine'+seed+')" opacity=".6"/><path d="M22 88 L11 98 M68 88 L79 98" stroke="'+p[0]+'" stroke-width="9" stroke-linecap="round"/></svg>';
 }
 
-function weightedPick(pool){const weight=f=>f.weight*((state.wasserCheat&&["レア","エピック","ミシック","レジェンド"].includes(f.rarity))?99999:1);let total=pool.reduce((s,f)=>s+weight(f),0),n=Math.random()*total;for(const f of pool){n-=weight(f);if(n<=0)return f}return pool[pool.length-1]}
+function weightedPick(pool){const weight=f=>f.weight*((state.wasserCheat&&["レア","エピック","ミシック","レジェンド","ウルトラ","神","シークレット"].includes(f.rarity))?99999:1);let total=pool.reduce((s,f)=>s+weight(f),0),n=Math.random()*total;for(const f of pool){n-=weight(f);if(n<=0)return f}return pool[pool.length-1]}
 let lastMode="basic";
 function pull(mode){
 const costs={basic:100,mega:400,starr:150,epicBox:700,rainbowBox:1200};
 if((mode==="super"&&state.gems<3)||(mode==="legendBox"&&state.gems<15))return;if(mode==="chaos"&&(state.chaosDrops||0)<1)return;if(costs[mode]&&state.coins<costs[mode])return;
 if(mode==="super")state.gems-=3;else if(mode==="legendBox")state.gems-=15;else if(mode==="chaos")state.chaosDrops--;else if(costs[mode])state.coins-=costs[mode];
-let pool=fighters.slice();
+let pool=fighters.filter(f=>["ノーマル","レア","エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="super"||mode==="mega")pool=fighters.filter(f=>["レア","エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="epicBox")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="legendBox")pool=fighters.filter(f=>f.rarity==="レジェンド");
@@ -276,15 +279,15 @@ if(mode==="rainbowBox")pool=fighters.filter(f=>["ミシック","レジェンド"
 if(mode==="chaos")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="starr"){const roll=Math.random();const target=roll<.48?"ノーマル":roll<.78?"レア":roll<.93?"エピック":roll<.99?"ミシック":"レジェンド";pool=fighters.filter(f=>f.rarity===target)}
 let f;
-if(state.wasserCheat){f=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
+if(state.wasserCheat){f=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット"].includes(x.rarity)));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.chaosBonus="";if(mode==="chaos"){const bonus=Math.random();if(bonus<.25){const g=1+Math.floor(Math.random()*3);state.gems+=g;state.chaosBonus="💎 追加 "+g+"ジェム！"}else if(bonus<.55){const c=100+Math.floor(Math.random()*201);state.coins+=c;state.chaosBonus="🪙 追加 "+c+"コイン！"}else state.chaosBonus="追加報酬なし！";}
 const chaosExtras=[];
-function awardFighter(g){state.pulls++;const dup=!!state.owned[g.name];state.owned[g.name]=(state.owned[g.name]||0)+1;if(dup){state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[g.rarity]||0)}return dup}
+function awardFighter(g){state.pulls++;const dup=!!state.owned[g.name];state.owned[g.name]=(state.owned[g.name]||0)+1;if(dup){state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300,"ウルトラ":500,"神":1000,"シークレット":2500}[g.rarity]||0)}return dup}
 const duplicate=awardFighter(f);
 if(mode==="chaos"){
  for(let i=0;i<2;i++){
   let extra;
-  if(state.wasserCheat){extra=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){extra=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{extra=weightedPick(pool);state.pity--}
+  if(state.wasserCheat){extra=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット"].includes(x.rarity)));state.pity=20}else if(state.pity<=1){extra=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{extra=weightedPick(pool);state.pity--}
   const dup=awardFighter(extra);chaosExtras.push({fighter:extra,duplicate:dup});
  }
 }
@@ -300,7 +303,7 @@ function showResult(f,duplicate){
  $("result").classList.add("show");$("resultFace").innerHTML=fighterArt(f);$("resultName").textContent=f.name;
  $("resultTag").textContent=(f.rarity==="レジェンド"?"🌟 ":"✨ ")+f.rarity+"！";$("resultTag").style.background=f.color;$("resultTag").style.color="#fff";
  $("resultDesc").textContent=f.desc;$("resultExtra").textContent=duplicate?"かぶり！ コインを獲得！ パワー "+state.owned[f.name]:"新しいファイターをゲット！";
- if(f.rarity==="レジェンド")$("resultExtra").textContent="🎊 超激レア！！ おめでとう！ 🎊";
+ if(["レジェンド","ウルトラ","神","シークレット"].includes(f.rarity))$("resultExtra").textContent="🎊 超激レア！！ おめでとう！ 🎊";
  pendingFighter=f;pendingDuplicate=duplicate;
  const overlay=$("revealOverlay"),card=$("revealCard");card.style.setProperty("--rarity",f.color);
  const dropNames={basic:"ノーマルボックス",super:"スーパーボックス",mega:"メガボックス",chaos:"カオスドロップ",starr:"スタードロップ",ten:"10連ボックス"};
@@ -317,7 +320,7 @@ function openPendingFighter(){
  crate.classList.add("opening");$("openTitle").textContent="オープン！！";$("openSubtitle").textContent="ファイター登場！";
  setTimeout(()=>{
   $("openStage").style.display="none";const card=$("revealCard");card.style.display="block";
-  const overlay=$("revealOverlay");if(f.rarity==="レジェンド")overlay.classList.add("legendary");
+  const overlay=$("revealOverlay");if(["レジェンド","ウルトラ","神","シークレット"].includes(f.rarity))overlay.classList.add("legendary");
   $("revealAvatar").innerHTML=fighterArt(f);$("revealName").textContent=f.name;$("revealDesc").textContent=f.desc;
   $("revealRarity").textContent="✦ "+f.rarity.toUpperCase()+" ✦";$("revealRarity").style.background=f.color;
   $("revealPower").textContent=(pendingDuplicate?"かぶり！ パワー "+state.owned[f.name]+" にアップ！":"✨ 新しいファイターをゲット！")+(state.chaosBonus?"　"+state.chaosBonus:"");
@@ -334,7 +337,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").
 $("basic").onclick=()=>{lastMode="basic";pull("basic")};$("super").onclick=()=>{lastMode="super";pull("super")};$("mega").onclick=()=>{lastMode="mega";pull("mega")};$("chaos").onclick=()=>{state.chaosDrops=(state.chaosDrops||0)+1;save();$("chaos").animate([{transform:"scale(1)"},{transform:"scale(1.1) rotate(-2deg)"},{transform:"scale(1)"}],{duration:220});};$("chaosOpen").onclick=()=>{lastMode="chaos";pull("chaos")};$("starr").onclick=()=>{lastMode="starr";pull("starr")};$("epicBox").onclick=()=>{lastMode="epicBox";pull("epicBox")};$("legendBox").onclick=()=>{lastMode="legendBox";pull("legendBox")};$("rainbowBox").onclick=()=>{lastMode="rainbowBox";pull("rainbowBox")};
 $("ten").onclick=()=>{
 if(state.coins<900)return;state.coins-=900;let results=[];
-for(let i=0;i<10;i++){let pool=fighters;let f;if(state.wasserCheat){f=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
+for(let i=0;i<10;i++){let pool=fighters.filter(x=>["ノーマル","レア","エピック","ミシック","レジェンド"].includes(x.rarity));let f;if(state.wasserCheat){f=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット"].includes(x.rarity)));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.pulls++;const dup=!!state.owned[f.name];state.owned[f.name]=(state.owned[f.name]||0)+1;if(dup)state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[f.rarity]);results.push(f)}
 const best=results.reduce((a,b)=>fighters.indexOf(a)>fighters.indexOf(b)?a:b);
 lastMode="ten";showResult(best,false);$("resultExtra").textContent="10連結果："+results.map(f=>f.face+f.name).join(" / ");save()
@@ -345,7 +348,7 @@ $("missionClaim").onclick=()=>{if(state.missionClaimed||state.pulls<5)return;sta
 $("redeemBtn").onclick=()=>{
  const input=$("redeemCode"),message=$("redeemMessage"),code=input.value.trim().toUpperCase();
  if(!code){message.style.color="#d9485f";message.textContent="コードを入力してね！";return}
- const rewards={COIN1000:{coins:1000,text:"🪙 1000コインを獲得！"},GEM10:{gems:10,text:"💎 10ジェムを獲得！"},CHAOS3:{chaosDrops:3,text:"🌀 カオスドロップを3個獲得！"},FREEBOX:{coins:500,gems:5,chaosDrops:1,text:"🎁 500コイン・5ジェム・カオスドロップ1個を獲得！"},"ワッサー":{wasserCheat:true,text:"🔥 チート発動！レア以上のキャラクターの抽選ウェイトが99999倍になった！"},"田所浩二":{wasserCheat:true,text:"🔥 チート発動！コイン・ジェムが毎秒10000増加＆レジェンド確定！"}};
+ const rewards={COIN1000:{coins:1000,text:"🪙 1000コインを獲得！"},GEM10:{gems:10,text:"💎 10ジェムを獲得！"},CHAOS3:{chaosDrops:3,text:"🌀 カオスドロップを3個獲得！"},FREEBOX:{coins:500,gems:5,chaosDrops:1,text:"🎁 500コイン・5ジェム・カオスドロップ1個を獲得！"},"ワッサー":{wasserCheat:true,text:"🔥 チート発動！レア度「ウルトラ・神・シークレット」が解放！毎秒コイン＆ジェムが増え、超高レアも狙える！"},"田所浩二":{wasserCheat:true,text:"🔥 チート発動！レア度「ウルトラ・神・シークレット」が解放！毎秒コイン＆ジェムが増え、超高レアも狙える！"}};
  if(!rewards[code]){message.style.color="#d9485f";message.textContent="そのコードは使えないよ。コードを確認してね。";return}
  state.redeemedCodes=state.redeemedCodes||{};
  if(state.redeemedCodes[code]){message.style.color="#d9485f";message.textContent="このコードはもう使用済みだよ！";return}
