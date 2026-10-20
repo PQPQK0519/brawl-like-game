@@ -188,7 +188,7 @@ if(mode==="super"||mode==="mega")pool=fighters.filter(f=>["レア","エピック
 if(mode==="chaos")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="starr"){const roll=Math.random();const target=roll<.48?"ノーマル":roll<.78?"レア":roll<.93?"エピック":roll<.99?"ミシック":"レジェンド";pool=fighters.filter(f=>f.rarity===target)}
 let f;
-if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
+if(state.wasserCheat){f=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.chaosBonus="";if(mode==="chaos"){const bonus=Math.random();if(bonus<.25){const g=1+Math.floor(Math.random()*3);state.gems+=g;state.chaosBonus="💎 追加 "+g+"ジェム！"}else if(bonus<.55){const c=100+Math.floor(Math.random()*201);state.coins+=c;state.chaosBonus="🪙 追加 "+c+"コイン！"}else state.chaosBonus="追加報酬なし！";}
 const chaosExtras=[];
 function awardFighter(g){state.pulls++;const dup=!!state.owned[g.name];state.owned[g.name]=(state.owned[g.name]||0)+1;if(dup){state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[g.rarity]||0)}return dup}
@@ -196,7 +196,7 @@ const duplicate=awardFighter(f);
 if(mode==="chaos"){
  for(let i=0;i<2;i++){
   let extra;
-  if(state.pity<=1){extra=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{extra=weightedPick(pool);state.pity--}
+  if(state.wasserCheat){extra=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){extra=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{extra=weightedPick(pool);state.pity--}
   const dup=awardFighter(extra);chaosExtras.push({fighter:extra,duplicate:dup});
  }
 }
@@ -246,7 +246,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").
 $("basic").onclick=()=>{lastMode="basic";pull("basic")};$("super").onclick=()=>{lastMode="super";pull("super")};$("mega").onclick=()=>{lastMode="mega";pull("mega")};$("chaos").onclick=()=>{state.chaosDrops=(state.chaosDrops||0)+1;save();$("chaos").animate([{transform:"scale(1)"},{transform:"scale(1.1) rotate(-2deg)"},{transform:"scale(1)"}],{duration:220});};$("chaosOpen").onclick=()=>{lastMode="chaos";pull("chaos")};$("starr").onclick=()=>{lastMode="starr";pull("starr")};
 $("ten").onclick=()=>{
 if(state.coins<900)return;state.coins-=900;let results=[];
-for(let i=0;i<10;i++){let pool=fighters;let f;if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
+for(let i=0;i<10;i++){let pool=fighters;let f;if(state.wasserCheat){f=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.pulls++;const dup=!!state.owned[f.name];state.owned[f.name]=(state.owned[f.name]||0)+1;if(dup)state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[f.rarity]);results.push(f)}
 const best=results.reduce((a,b)=>fighters.indexOf(a)>fighters.indexOf(b)?a:b);
 lastMode="ten";showResult(best,false);$("resultExtra").textContent="10連結果："+results.map(f=>f.face+f.name).join(" / ");save()
