@@ -90,6 +90,9 @@
 <button class="crate orange" id="mega"><span class="emoji">💎</span><span class="name">メガ箱</span><small>🪙 400コイン</small></button>
 <button class="crate chaos" id="chaos"><span class="emoji">🌀</span><span class="name">カオスドロップ</span><small>タップで増える！</small><small id="chaosCount">所持数：0個</small></button>
 <button class="crate starr" id="starr"><span class="emoji">🌟</span><span class="name">スタードロップ</span><small>🪙 150コイン</small></button>
+<button class="crate purple" id="epicBox"><span class="emoji">🟣</span><span class="name">エピック箱</span><small>🪙 700コイン</small></button>
+<button class="crate orange" id="legendBox"><span class="emoji">👑</span><span class="name">レジェンド箱</span><small>💎 15ジェム</small></button>
+<button class="crate chaos" id="rainbowBox"><span class="emoji">🌈</span><span class="name">レインボー箱</span><small>🪙 1200コイン</small></button>
 </div><p class="drop-note">🌀 カオスドロップをタップして集めよう！ 集めたら開封ボタンで報酬ゲット。🌟 スタードロップはレア度がランダム！</p><div class="actions"><button class="btn" id="chaosOpen">🌀 カオスドロップを開ける（0個）</button><button class="btn yellow" id="ten">🔥 10連ガチャ（900コイン）</button><button class="btn" id="daily">🎁 無料ボーナスを受け取る</button></div>
 <div class="result" id="result" aria-live="polite"><div class="big" id="resultFace">🎉</div><div id="resultTag" class="rarityTag">レア！</div><h3 id="resultName">ファイター名</h3><p id="resultDesc">説明</p><p id="resultExtra"></p><div class="actions" style="justify-content:center"><button class="btn yellow" id="again">もう一回！</button></div></div></section>
 <section class="panel"><h2>🪙 コインを稼ぐ</h2><div class="earn-grid">
@@ -262,11 +265,14 @@ function fighterArt(f){
 function weightedPick(pool){const weight=f=>f.weight*((state.wasserCheat&&["レア","エピック","ミシック","レジェンド"].includes(f.rarity))?99999:1);let total=pool.reduce((s,f)=>s+weight(f),0),n=Math.random()*total;for(const f of pool){n-=weight(f);if(n<=0)return f}return pool[pool.length-1]}
 let lastMode="basic";
 function pull(mode){
-const costs={basic:100,mega:400,starr:150};
-if(mode==="super"&&state.gems<3)return;if(mode==="chaos"&&(state.chaosDrops||0)<1)return;if(costs[mode]&&state.coins<costs[mode])return;
-if(mode==="super")state.gems-=3;else if(mode==="chaos")state.chaosDrops--;else if(costs[mode])state.coins-=costs[mode];
+const costs={basic:100,mega:400,starr:150,epicBox:700,rainbowBox:1200};
+if((mode==="super"&&state.gems<3)||(mode==="legendBox"&&state.gems<15))return;if(mode==="chaos"&&(state.chaosDrops||0)<1)return;if(costs[mode]&&state.coins<costs[mode])return;
+if(mode==="super")state.gems-=3;else if(mode==="legendBox")state.gems-=15;else if(mode==="chaos")state.chaosDrops--;else if(costs[mode])state.coins-=costs[mode];
 let pool=fighters.slice();
 if(mode==="super"||mode==="mega")pool=fighters.filter(f=>["レア","エピック","ミシック","レジェンド"].includes(f.rarity));
+if(mode==="epicBox")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
+if(mode==="legendBox")pool=fighters.filter(f=>f.rarity==="レジェンド");
+if(mode==="rainbowBox")pool=fighters.filter(f=>["ミシック","レジェンド"].includes(f.rarity));
 if(mode==="chaos")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="starr"){const roll=Math.random();const target=roll<.48?"ノーマル":roll<.78?"レア":roll<.93?"エピック":roll<.99?"ミシック":"レジェンド";pool=fighters.filter(f=>f.rarity===target)}
 let f;
@@ -325,7 +331,7 @@ $("revealContinue").onclick=()=>{$("revealOverlay").classList.remove("active");$
 $("revealOverlay").addEventListener("click",e=>{if(e.target===$("revealOverlay")){$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary")}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary")}});
 
-$("basic").onclick=()=>{lastMode="basic";pull("basic")};$("super").onclick=()=>{lastMode="super";pull("super")};$("mega").onclick=()=>{lastMode="mega";pull("mega")};$("chaos").onclick=()=>{state.chaosDrops=(state.chaosDrops||0)+1;save();$("chaos").animate([{transform:"scale(1)"},{transform:"scale(1.1) rotate(-2deg)"},{transform:"scale(1)"}],{duration:220});};$("chaosOpen").onclick=()=>{lastMode="chaos";pull("chaos")};$("starr").onclick=()=>{lastMode="starr";pull("starr")};
+$("basic").onclick=()=>{lastMode="basic";pull("basic")};$("super").onclick=()=>{lastMode="super";pull("super")};$("mega").onclick=()=>{lastMode="mega";pull("mega")};$("chaos").onclick=()=>{state.chaosDrops=(state.chaosDrops||0)+1;save();$("chaos").animate([{transform:"scale(1)"},{transform:"scale(1.1) rotate(-2deg)"},{transform:"scale(1)"}],{duration:220});};$("chaosOpen").onclick=()=>{lastMode="chaos";pull("chaos")};$("starr").onclick=()=>{lastMode="starr";pull("starr")};$("epicBox").onclick=()=>{lastMode="epicBox";pull("epicBox")};$("legendBox").onclick=()=>{lastMode="legendBox";pull("legendBox")};$("rainbowBox").onclick=()=>{lastMode="rainbowBox";pull("rainbowBox")};
 $("ten").onclick=()=>{
 if(state.coins<900)return;state.coins-=900;let results=[];
 for(let i=0;i<10;i++){let pool=fighters;let f;if(state.wasserCheat){f=weightedPick(fighters.filter(x=>x.rarity==="レジェンド"));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
