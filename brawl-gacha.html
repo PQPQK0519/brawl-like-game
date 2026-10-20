@@ -51,6 +51,34 @@
 @keyframes sparkFly{0%{transform:translateY(0) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(-125vh) rotate(700deg);opacity:0}}
 @media(prefers-reduced-motion:reduce){.reveal-card,.reveal-avatar,.reveal-avatar:before,.reveal-card:before,.reveal-sparks i{animation:none!important}}
 
+
+.fighter .face{height:76px;display:grid;place-items:center;font-size:36px}
+.fighter-art{width:100%;height:100%;max-height:190px;display:block;filter:drop-shadow(0 8px 5px #0003)}
+.collection .fighter-art{height:74px;width:74px;margin:auto}
+.reveal-avatar .fighter-art{height:180px;width:180px;margin:auto}
+.open-stage{position:relative;z-index:2;width:min(430px,100%);text-align:center;padding:25px 16px 22px;border-radius:28px;border:3px solid #ffffffa8;background:linear-gradient(155deg,#263f91,#111a43);box-shadow:0 0 40px #60d9ff77;animation:cardBurst .55s cubic-bezier(.16,1.2,.3,1) both}
+.open-stage h2{font-size:clamp(24px,6vw,34px);margin:5px 0 3px;text-shadow:0 3px #101a43}
+.open-stage p{margin:7px 0 15px;color:#e3eaff;font-weight:800}
+.tap-crate{width:160px;height:150px;margin:14px auto 18px;display:grid;place-items:center;cursor:pointer;position:relative;filter:drop-shadow(0 12px 0 #090e2c66);animation:crateBob 1.2s ease-in-out infinite;user-select:none}
+.tap-crate .crate-box{width:126px;height:100px;position:absolute;bottom:8px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(135deg,#ffcf53 0%,#ff9a26 45%,#d94e22 100%);box-shadow:inset 0 7px #fff5,inset 0 -8px #8d2b1b88}
+.tap-crate .crate-box:before{content:"";position:absolute;left:42%;top:0;height:100%;width:15px;background:#ffe67b;border-left:3px solid #fff8;border-right:3px solid #a54b1a}
+.tap-crate .crate-box:after{content:"★";position:absolute;inset:16px 0 0;display:grid;place-items:center;font-size:37px;color:#fff8;text-shadow:0 3px #b84a24}
+.tap-crate .crate-lid{position:absolute;z-index:2;top:16px;width:142px;height:38px;border:5px solid #8c3e18;border-radius:12px;background:linear-gradient(#ffe77a,#ffad31);box-shadow:inset 0 5px #fff8}
+.tap-crate:focus-visible{outline:4px solid white;border-radius:18px}
+.tap-crate.opening{animation:crateShake .14s linear 5,crateLaunch .55s ease .7s forwards}
+.tap-crate.opening .crate-lid{animation:lidFly .6s ease .7s forwards}
+.tap-crate.opening .crate-box{animation:boxFlash .6s ease .65s forwards}
+.tap-crate .crate-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#fff 0,#ffe66b99 24%,transparent 70%);opacity:0}
+.tap-crate.opening .crate-glow{animation:glowBurst .8s ease .6s forwards}
+.open-hint{display:inline-block;border-radius:999px;padding:9px 18px;background:#ffdc55;color:#3b2450;font-weight:1000;box-shadow:0 4px 0 #b77c22;animation:hintPulse .9s ease-in-out infinite}
+@keyframes crateBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes crateShake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-8px) rotate(-5deg)}75%{transform:translateX(8px) rotate(5deg)}}
+@keyframes lidFly{to{transform:translateY(-100px) rotate(-24deg);opacity:0}}
+@keyframes boxFlash{to{transform:scale(1.2);opacity:0}}
+@keyframes crateLaunch{to{transform:scale(1.45);opacity:0}}
+@keyframes glowBurst{0%{opacity:0;transform:scale(.2)}45%{opacity:1;transform:scale(1.25)}100%{opacity:0;transform:scale(2)}}
+@keyframes hintPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
 </style></head>
 <body><main class="wrap">
 <header class="top"><div class="logo">⭐ BRAWL <span>GACHA!</span></div><div class="pill">🪙 コイン <span id="coins">500</span></div><div class="pill">💎 ジェム <span id="gems">10</span></div></header>
@@ -67,7 +95,16 @@
 
 <div class="reveal-overlay" id="revealOverlay" role="dialog" aria-modal="true" aria-label="ファイター登場">
   <div class="reveal-sparks" id="revealSparks"></div>
-  <div class="reveal-card" id="revealCard" style="--rarity:#22a967">
+  <div class="open-stage" id="openStage">
+    <div class="reveal-kicker">MYSTERY DROP</div>
+    <div class="tap-crate" id="tapCrate" role="button" tabindex="0" aria-label="箱をタップして開ける">
+      <div class="crate-glow"></div><div class="crate-box"></div><div class="crate-lid"></div>
+    </div>
+    <h2 id="openTitle">箱をタップ！</h2>
+    <p id="openSubtitle">中からファイターが出てくるよ…</p>
+    <span class="open-hint">👆 タップして開ける！</span>
+  </div>
+  <div class="reveal-card" id="revealCard" id="revealCard" style="--rarity:#22a967">
     <div class="reveal-kicker">NEW FIGHTER UNLOCKED</div>
     <div class="reveal-rarity" id="revealRarity">RARE</div>
     <div class="reveal-avatar" id="revealAvatar">🤖</div>
@@ -113,8 +150,25 @@ $("daily").disabled=state.daily;$("daily").textContent=state.daily?"✅ 今日�
 const list=$("collection");list.innerHTML="";
 const got=fighters.filter(f=>state.owned[f.name]);
 if(!got.length){list.innerHTML='<div class="empty">ガチャを引いてファイターを集めよう！</div>';return}
-got.sort((a,b)=>fighters.indexOf(b)-fighters.indexOf(a)).forEach(f=>{const d=document.createElement("div");d.className="fighter";d.style.borderColor=f.color;d.innerHTML='<span class="count">×'+state.owned[f.name]+'</span><div class="face">'+f.face+'</div><strong>'+f.name+'</strong><small>'+f.rarity+'</small>';list.appendChild(d)})
+got.sort((a,b)=>fighters.indexOf(b)-fighters.indexOf(a)).forEach(f=>{const d=document.createElement("div");d.className="fighter";d.style.borderColor=f.color;d.innerHTML='<span class="count">×'+state.owned[f.name]+'</span><div class="face">'+fighterArt(f)+'</div><strong>'+f.name+'</strong><small>'+f.rarity+'</small>';list.appendChild(d)})
 }
+
+function fighterArt(f){
+ const palettes={"ボルト":["#5de4ff","#1974b9","#123b70"],"ニンジャ":["#8b91a8","#343b5b","#171a2b"],"ロッキー":["#ffb36c","#c94d3e","#6c2433"],"ミミ":["#ffd2f2","#d85ca8","#7c337c"],"パイロ":["#ffcc66","#e85b31","#772a30"],"スパーク":["#ffe56b","#f1a51d","#7748b8"],"ジェット":["#a4f4ff","#3995dc","#273f8d"],"グミ":["#ffb3ed","#ef5aab","#8d398e"],"シャーク":["#8cecff","#3b91b5","#174466"],"メカウルフ":["#d0d8ff","#626b96","#292d55"],"マジシャン":["#e4b3ff","#8c51cf","#442a7f"],"アイス":["#d7faff","#73c9ed","#2b5d9a"],"フェニックス":["#ffbe8a","#e34a59","#81264b"],"シャドウ":["#a8b1d4","#45446f","#19172f"],"ドラゴン":["#a7ffb1","#36a36e","#18543f"],"キング":["#ffe88a","#d99422","#6d3b15"],"ギャラクシー":["#d4b6ff","#8c5fe7","#3b267f"],"ゴールデンベア":["#ffe7a0","#c67b22","#704013"]};
+ const p=palettes[f.name]||["#b8e7ff","#418acb","#243c70"],seed=Math.max(0,fighters.indexOf(f)),helmet=seed%4;
+ let accessory="";
+ if(f.rarity==="レジェンド")accessory='<path d="M34 49 L45 24 L56 49 L69 27 L74 53" fill="#ffe879" stroke="#a75c1a" stroke-width="3"/>';
+ else if(f.rarity==="ミシック")accessory='<path d="M25 48 Q45 8 65 48" fill="none" stroke="#ffdf78" stroke-width="5"/>';
+ else if(f.rarity==="エピック")accessory='<path d="M27 42 L20 20 L39 31 L45 13 L51 31 L70 20 L63 44" fill="'+p[1]+'" stroke="#fff8" stroke-width="2"/>';
+ const eye=f.name==="シャドウ"?"#d5e8ff":"#17253d";
+ const mouth=f.name==="ミミ"?'<path d="M39 78 Q45 84 51 78" fill="none" stroke="#82385e" stroke-width="3" stroke-linecap="round"/>':'<path d="M38 78 L52 78" stroke="#6a2940" stroke-width="3" stroke-linecap="round"/>';
+ return '<svg class="fighter-art" viewBox="0 0 90 112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+f.name+'"><defs><linearGradient id="body'+seed+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+p[0]+'"/><stop offset=".55" stop-color="'+p[1]+'"/><stop offset="1" stop-color="'+p[2]+'"/></linearGradient><radialGradient id="shine'+seed+'"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>'+
+ '<ellipse cx="45" cy="104" rx="29" ry="5" fill="#070d2b" opacity=".3"/><path d="M18 106 Q16 83 30 79 L60 79 Q74 85 72 106Z" fill="url(#body'+seed+')" stroke="'+p[2]+'" stroke-width="3"/><path d="M30 84 L45 97 L60 84" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="4"/>'+
+ '<path d="M25 56 Q16 35 28 21 Q45 3 62 21 Q74 37 65 57 L59 73 Q45 86 31 73Z" fill="url(#body'+seed+')" stroke="'+p[2]+'" stroke-width="3"/>'+
+ (helmet===0?'<path d="M25 43 Q18 12 45 13 Q72 12 65 43 L59 34 L31 34Z" fill="'+p[2]+'" stroke="#fff5" stroke-width="2"/>':helmet===1?'<path d="M23 39 L27 18 L40 28 L47 10 L57 28 L67 18 L68 43Z" fill="'+p[2]+'" stroke="#fff6" stroke-width="2"/>':helmet===2?'<path d="M23 41 Q18 18 45 12 Q72 18 67 41 L58 32 L32 32Z" fill="'+p[2]+'"/><path d="M29 25 L61 25" stroke="#fff8" stroke-width="3"/>':'<path d="M21 43 Q15 20 34 14 L45 24 L57 14 Q75 25 69 43 L60 35 L30 35Z" fill="'+p[2]+'" stroke="#fff7" stroke-width="2"/>')+
+ '<ellipse cx="35" cy="53" rx="7" ry="9" fill="#f8fbff"/><ellipse cx="55" cy="53" rx="7" ry="9" fill="#f8fbff"/><ellipse cx="37" cy="54" rx="3.6" ry="5.4" fill="'+eye+'"/><ellipse cx="53" cy="54" rx="3.6" ry="5.4" fill="'+eye+'"/><circle cx="38" cy="52" r="1.5" fill="#fff"/><circle cx="54" cy="52" r="1.5" fill="#fff"/>'+mouth+accessory+'<path d="M26 38 Q45 23 64 38" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="4"/><ellipse cx="28" cy="26" rx="17" ry="22" fill="url(#shine'+seed+')" opacity=".6"/><path d="M22 88 L11 98 M68 88 L79 98" stroke="'+p[0]+'" stroke-width="9" stroke-linecap="round"/></svg>';
+}
+
 function weightedPick(pool){let total=pool.reduce((s,f)=>s+f.weight,0),n=Math.random()*total;for(const f of pool){n-=f.weight;if(n<=0)return f}return pool[pool.length-1]}
 let lastMode="basic";
 function pull(mode){
@@ -129,30 +183,40 @@ state.pulls++;const duplicate=!!state.owned[f.name];state.owned[f.name]=(state.o
 if(duplicate){const reward={"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300}[f.rarity];state.coins+=reward}
 showResult(f,duplicate);lastMode=mode;save()
 }
+
+let pendingFighter=null,pendingDuplicate=false;
 function showResult(f,duplicate){
-  $("result").classList.add("show");
-  $("resultFace").textContent=f.face;$("resultName").textContent=f.name;
-  $("resultTag").textContent=(f.rarity==="レジェンド"?"🌟 ":"✨ ")+f.rarity+"！";
-  $("resultTag").style.background=f.color;$("resultTag").style.color="#fff";
-  $("resultDesc").textContent=f.desc;
-  $("resultExtra").textContent=duplicate?"かぶり！ コインを獲得！ パワー "+state.owned[f.name]:"新しいファイターをゲット！";
-  if(f.rarity==="レジェンド")$("resultExtra").textContent="🎊 超激レア！！ おめでとう！ 🎊";
-  const overlay=$("revealOverlay"),card=$("revealCard");
-  card.style.setProperty("--rarity",f.color);
-  overlay.classList.remove("legendary");void overlay.offsetWidth;
-  if(f.rarity==="レジェンド")overlay.classList.add("legendary");
-  $("revealAvatar").textContent=f.face;$("revealName").textContent=f.name;
-  $("revealDesc").textContent=f.desc;$("revealRarity").textContent="✦ "+f.rarity.toUpperCase()+" ✦";
-  $("revealRarity").style.background=f.color;
-  $("revealPower").textContent=duplicate?"かぶり！ パワー "+state.owned[f.name]+" にアップ！":"✨ 新しいファイターをゲット！";
-  $("revealContinue").textContent="OK！ コレクションを見る";
-  const sparks=$("revealSparks");sparks.innerHTML="";
-  for(let i=0;i<32;i++){const p=document.createElement("i");p.style.setProperty("--x",Math.random()*100+"%");p.style.setProperty("--c",[f.color,"#fff","#ffe76a","#68e8ff"][i%4]);p.style.setProperty("--t",(1.6+Math.random()*2.4)+"s");p.style.setProperty("--d",(Math.random()*1.8)+"s");sparks.appendChild(p)}
-  overlay.classList.add("active");
+ $("result").classList.add("show");$("resultFace").innerHTML=fighterArt(f);$("resultName").textContent=f.name;
+ $("resultTag").textContent=(f.rarity==="レジェンド"?"🌟 ":"✨ ")+f.rarity+"！";$("resultTag").style.background=f.color;$("resultTag").style.color="#fff";
+ $("resultDesc").textContent=f.desc;$("resultExtra").textContent=duplicate?"かぶり！ コインを獲得！ パワー "+state.owned[f.name]:"新しいファイターをゲット！";
+ if(f.rarity==="レジェンド")$("resultExtra").textContent="🎊 超激レア！！ おめでとう！ 🎊";
+ pendingFighter=f;pendingDuplicate=duplicate;
+ const overlay=$("revealOverlay"),card=$("revealCard");card.style.setProperty("--rarity",f.color);
+ overlay.classList.remove("legendary");overlay.classList.add("active");$("openStage").style.display="block";card.style.display="none";
+ $("openTitle").textContent=f.rarity==="レジェンド"?"うわっ！金色の箱だ！！":"箱をタップ！";
+ $("openSubtitle").textContent=f.rarity==="レジェンド"?"超激レアの予感…！":"中からファイターが出てくるよ…";
+ $("tapCrate").classList.remove("opening");
+ const sparks=$("revealSparks");sparks.innerHTML="";
+ for(let i=0;i<32;i++){const p=document.createElement("i");p.style.setProperty("--x",Math.random()*100+"%");p.style.setProperty("--c",[f.color,"#fff","#ffe76a","#68e8ff"][i%4]);p.style.setProperty("--t",(1.6+Math.random()*2.4)+"s");p.style.setProperty("--d",(Math.random()*1.8)+"s");sparks.appendChild(p)}
 }
-$("revealContinue").onclick=()=>{$("revealOverlay").classList.remove("active");$("result").scrollIntoView({behavior:"smooth",block:"nearest"})};
-$("revealOverlay").addEventListener("click",e=>{if(e.target===$("revealOverlay"))$("revealOverlay").classList.remove("active")});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")$("revealOverlay").classList.remove("active")});
+function openPendingFighter(){
+ const f=pendingFighter;if(!f)return;const crate=$("tapCrate");if(crate.classList.contains("opening"))return;
+ crate.classList.add("opening");$("openTitle").textContent="オープン！！";$("openSubtitle").textContent="ファイター登場！";
+ setTimeout(()=>{
+  $("openStage").style.display="none";const card=$("revealCard");card.style.display="block";
+  const overlay=$("revealOverlay");if(f.rarity==="レジェンド")overlay.classList.add("legendary");
+  $("revealAvatar").innerHTML=fighterArt(f);$("revealName").textContent=f.name;$("revealDesc").textContent=f.desc;
+  $("revealRarity").textContent="✦ "+f.rarity.toUpperCase()+" ✦";$("revealRarity").style.background=f.color;
+  $("revealPower").textContent=pendingDuplicate?"かぶり！ パワー "+state.owned[f.name]+" にアップ！":"✨ 新しいファイターをゲット！";
+  $("revealContinue").textContent="OK！ コレクションを見る";
+ },1250);
+}
+$("tapCrate").onclick=openPendingFighter;
+$("tapCrate").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPendingFighter()}};
+
+$("revealContinue").onclick=()=>{$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary");$("result").scrollIntoView({behavior:"smooth",block:"nearest"})};
+$("revealOverlay").addEventListener("click",e=>{if(e.target===$("revealOverlay")){$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary")}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").classList.remove("active");$("revealOverlay").classList.remove("legendary")}});
 
 $("basic").onclick=()=>pull("basic");$("super").onclick=()=>pull("super");$("mega").onclick=()=>pull("mega");
 $("ten").onclick=()=>{
