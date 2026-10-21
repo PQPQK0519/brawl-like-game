@@ -79,8 +79,13 @@
 @keyframes glowBurst{0%{opacity:0;transform:scale(.2)}45%{opacity:1;transform:scale(1.25)}100%{opacity:0;transform:scale(2)}}
 @keyframes hintPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 
+
+.music-controls{position:fixed;right:14px;bottom:14px;z-index:120;display:flex;gap:8px;align-items:center;background:#101e54ed;border:2px solid #ffffff55;border-radius:16px;padding:9px 12px;box-shadow:0 5px 18px #0004;color:white;font-weight:850}
+.music-controls button{border:0;border-radius:10px;padding:8px 10px;background:#ffdc55;color:#35254b;font-weight:950;cursor:pointer}
+.music-controls input{width:86px;accent-color:#ffdc55}
+@media(max-width:520px){.music-controls{right:8px;bottom:8px;padding:7px 9px;font-size:12px}.music-controls input{width:64px}}
 </style></head>
-<body><main class="wrap">
+<body><div class="music-controls" aria-label="BGM controls"><span id="musicStatus">🎵 BGM OFF</span><button id="musicToggle" type="button">▶ 再生</button><label for="musicVolume">音量</label><input id="musicVolume" type="range" min="0" max="100" value="22" aria-label="音量"></div><main class="wrap">
 <header class="top"><div class="logo">⭐ BRAWL <span>GACHA!</span></div><div class="pill">🪙 コイン <span id="coins">500</span></div><div class="pill">💎 ジェム <span id="gems">10</span></div></header>
 <section class="hero"><h1>最強ファイターをゲット！</h1><p>ガチャを引いて、キミだけのチームを作ろう！</p><div class="stats"><div class="stat">👊 所持ファイター <span id="owned">0</span>/18</div><div class="stat">🎟️ ガチャ回数 <span id="pulls">0</span></div><div class="stat">✨ 天井まで <span id="pity">20</span> 回</div></div></section>
 <section class="panel"><h2>🎯 レアリティ</h2><div class="rarities"><div class="rarity common"><b>⚪</b>ノーマル</div><div class="rarity rare"><b>🟢</b>レア</div><div class="rarity epic"><b>🟣</b>エピック</div><div class="rarity mythic"><b>💗</b>ミシック</div><div class="rarity legend"><b>🟡</b>レジェンド</div><div class="rarity ultra cheat-rarity"><b>🔷</b>ウルトラ</div><div class="rarity god cheat-rarity"><b>👑</b>神</div><div class="rarity secret cheat-rarity"><b>👁️</b>シークレット</div><div class="rarity transcendent cheat-rarity"><b>🌠</b>超越</div><div class="rarity void cheat-rarity"><b>🌑</b>虚無</div><div class="rarity genesis cheat-rarity"><b>💠</b>創世</div><div class="rarity secret cheat-rarity"><b>🔐</b>隠し</div></div><p class="drop-note">🔒 ウルトラ以上はチートコード限定！ チート発動後、ガチャ前にキーボードで「12099」と入力すると次のガチャで隠しキャラ確定！</p></section>
@@ -128,6 +133,37 @@
 
 </main>
 <script>
+
+/* Original synthesized arcade-style background music; no external audio files needed. */
+let musicCtx=null,musicTimer=null,musicStep=0,musicEnabled=false;
+const musicVolume=$("musicVolume"),musicToggle=$("musicToggle"),musicStatus=$("musicStatus");
+function playMusicNote(freq,duration,wave="triangle",gain=.045,delay=0){
+ if(!musicCtx||!musicEnabled)return;
+ const now=musicCtx.currentTime+delay,osc=musicCtx.createOscillator(),amp=musicCtx.createGain();
+ osc.type=wave;osc.frequency.setValueAtTime(freq,now);
+ amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(Math.max(.0002,gain*(Number(musicVolume.value)/100)),now+.015);
+ amp.gain.exponentialRampToValueAtTime(.0001,now+duration);
+ osc.connect(amp);amp.connect(musicCtx.destination);osc.start(now);osc.stop(now+duration+.03);
+}
+function musicBeat(){
+ if(!musicEnabled)return;
+ const melody=[523.25,659.25,783.99,659.25,587.33,698.46,880,698.46,523.25,659.25,783.99,1046.5,880,783.99,659.25,587.33];
+ const bass=[130.81,130.81,164.81,164.81,146.83,146.83,174.61,174.61];
+ const n=musicStep%melody.length;
+ playMusicNote(melody[n],.22,"square",.025);
+ if(musicStep%2===0)playMusicNote(bass[(musicStep/2|0)%bass.length],.36,"triangle",.06);
+ if(musicStep%4===0)playMusicNote(90,.07,"sine",.02);
+ musicStep++;musicTimer=setTimeout(musicBeat,220);
+}
+async function toggleMusic(){
+ if(musicEnabled){musicEnabled=false;if(musicTimer)clearTimeout(musicTimer);musicToggle.textContent="▶ 再生";musicStatus.textContent="🎵 BGM OFF";return;}
+ try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC){musicStatus.textContent="音声非対応";return;}
+ musicCtx=musicCtx||new AC();if(musicCtx.state==="suspended")await musicCtx.resume();
+ musicEnabled=true;musicToggle.textContent="⏸ 停止";musicStatus.textContent="🎵 BGM ON";musicBeat();
+ }catch(e){musicStatus.textContent="再生できません";}}
+musicToggle.addEventListener("click",toggleMusic);
+musicVolume.addEventListener("input",()=>{if(musicEnabled){musicStatus.textContent="🎵 BGM "+musicVolume.value+"%";}});
+
 const fighters=[
 {name:"ボルト",face:"🤖",rarity:"ノーマル",desc:"電撃ショットが得意なロボット。",color:"#8c9baa",weight:38},
 {name:"ニンジャ",face:"🥷",rarity:"ノーマル",desc:"すばやい動きで敵を翻弄！",color:"#8c9baa",weight:35},
