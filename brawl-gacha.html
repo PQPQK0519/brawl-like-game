@@ -473,7 +473,19 @@ function pullHidden100m(){
  $("resultExtra").textContent="獲得キャラ："+pick.name+" × "+count.toLocaleString()+"体 ／ かぶり報酬："+(state.coins-beforeCoins).toLocaleString()+"コイン";
  save();btn.disabled=false;btn.textContent="🔐 隠しキャラ限定・1億万連ガチャ！";
 }
-$("hidden100mGacha").addEventListener("click",function(e){e.preventDefault();e.stopPropagation();pullHidden100m();});
+// Capture-phase handler: works even if another UI layer stops bubbling.
+document.addEventListener("click",function(e){
+ const target=e.target&&e.target.closest?e.target.closest("#hidden100mGacha"):null;
+ if(!target)return;
+ e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+ if(target.dataset.busy==="1")return;
+ target.dataset.busy="1";target.disabled=true;target.textContent="⏳ ガチャを処理中…";
+ setTimeout(function(){
+  try{pullHidden100m();}
+  catch(err){showGachaNotice("ガチャ処理でエラーが起きたよ。ページを再読み込みしてもう一度試してね。");}
+  finally{target.dataset.busy="0";target.disabled=false;target.textContent="🔐 隠しキャラ限定・1億万連ガチャ！";}
+ },0);
+},true);
 
 let pendingFighter=null,pendingDuplicate=false;
 const rarityTapOrder=["ノーマル","レア","エピック","ミシック","レジェンド"];
