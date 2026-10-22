@@ -305,7 +305,7 @@ const fighters=[
 {name:"Ω・無限創世神",face:"Ω",rarity:"Ω",desc:"すべての世界を生み出す究極存在。",color:"#facc15",weight:1}
 ];
 const rarityColor={"ノーマル":"#8c9baa","レア":"#22a967","エピック":"#9b55e8","ミシック":"#ed4e8b","レジェンド":"#ff9e24","ウルトラ":"#00e5ff","神":"#ffdf45","シークレット":"#ff3df2","超越":"#b7a2ff","虚無":"#8e44ff","創世":"#ff7bd5","隠し":"#ffffff"};
-let state={coins:500,gems:10,pulls:0,pity:20,owned:{},daily:false,chaosDrops:0,battleReadyAt:0,missionClaimed:false,gemReadyAt:0,redeemedCodes:{},wasserCheat:false,hiddenCodeReady:false,hiddenCodeBuffer:"",extremeCodeBuffer:"",extremeCodeReady:false,gacha800kUnlocked:false,hidden100mUnlocked:false,hageTakaseGachaUnlocked:false,nextRarityFloor:"ノーマル"};
+let state={coins:500,gems:10,pulls:0,pity:20,owned:{},daily:false,chaosDrops:0,battleReadyAt:0,missionClaimed:false,gemReadyAt:0,redeemedCodes:{},wasserCheat:false,hiddenCodeReady:false,hiddenCodeBuffer:"",extremeCodeBuffer:"",extremeCodeReady:false,gacha800kUnlocked:false,hidden100mUnlocked:false,hageTakaseGachaUnlocked:false,battleCount:0,bossUnlocked:false,bossClaimed:false,nextRarityFloor:"ノーマル"};
 try{const saved=localStorage.getItem("brawlGachaSave");if(saved)state={...state,...JSON.parse(saved)};if(state.redeemedCodes&&state.redeemedCodes["インムキング"]){state.hidden100mUnlocked=true;state.wasserCheat=true}}catch(e){}
 // 一度解放したら、このブラウザでは次回以降も表示する
 try{if(localStorage.getItem("hageTakaseGachaUnlocked")==="1")state.hageTakaseGachaUnlocked=true}catch(e){}
@@ -564,11 +564,22 @@ function fighterPower(f){return ({ "ノーマル":0,"レア":8,"エピック":16
 function startFighterBattle(){
  const name=$("battleFighter").value;if(!name||!state.owned[name]){$("battleMessage").textContent="先にガチャでゲットしたファイターを選んでね！";return}
  state.battleFighterName=name;const player=fighters.find(f=>f.name===name);
+ if(state.bossUnlocked&&!state.bossClaimed){startBossBattle(player);return}
  const enemies=fighters.filter(f=>f.name!==name&&f.rarity!=="隠し"&&["レア","エピック","ミシック","レジェンド","ウルトラ","神","シークレット","超越","虚無","創世","古代","幻想","混沌","神話","永遠","超新星","宇宙","禁断","絶対","Ω"].includes(f.rarity));
  const enemy=enemies[Math.floor(Math.random()*enemies.length)]||fighters[0];
  const pPower=fighterPower(player),ePower=fighterPower(enemy);
  battleState={active:true,player,enemy,playerMaxHp:120+pPower*10+(state.owned[name]-1)*8,playerHp:120+pPower*10+(state.owned[name]-1)*8,enemyMaxHp:105+ePower*10,enemyHp:105+ePower*10,turn:0,skillReady:true,healReady:true};
  $("battleMessage").textContent=player.name+"が出撃！ "+enemy.name+"が現れた！ バトル開始！";updateBattleUI();
+}
+function startBossBattle(player){
+ const boss={name:"ダーク・キング",face:"👑",rarity:"ボス",desc:"5戦目のあとに現れる強敵！倒すと仲間になる。",color:"#ff1744",weight:1};
+ const power=fighterPower(player);
+ battleState={active:true,player,enemy:boss,playerMaxHp:120+power*10+((state.owned[player.name]||1)-1)*8,playerHp:120+power*10+((state.owned[player.name]||1)-1)*8,enemyMaxHp:1800,enemyHp:1800,turn:0,skillReady:true,healReady:true,isBoss:true};
+ $("battleMessage").textContent="🚨 ボス出現！ ダーク・キングを倒して仲間にしよう！";updateBattleUI();
+}
+function finishBattleCount(){
+ state.battleCount=(Number(state.battleCount)||0)+1;
+ if(state.battleCount>=5&&!state.bossClaimed)state.bossUnlocked=true;
 }
 function battleAction(kind){
  if(!battleState.active)return;
@@ -576,9 +587,9 @@ function battleAction(kind){
  if(kind==="attack"){const dmg=p.rarity==="隠し"?999999999:12+Math.floor(Math.random()*13)+Math.floor(fighterPower(p)*.18);b.enemyHp=Math.max(0,b.enemyHp-dmg);$("battleMessage").textContent=p.name+"の攻撃！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 👑 カンスト攻撃！":"");}
  else if(kind==="skill"){if(!b.skillReady)return;const dmg=p.rarity==="隠し"?999999999:27+Math.floor(Math.random()*20)+Math.floor(fighterPower(p)*.35);b.enemyHp=Math.max(0,b.enemyHp-dmg);b.skillReady=false;$("battleMessage").textContent="💥 "+p.name+"の必殺技！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 🌌 カンスト必殺技！":"");}
  else if(kind==="heal"){if(!b.healReady)return;const heal=Math.min(45+Math.floor(fighterPower(p)*.25),b.playerMaxHp-b.playerHp);b.playerHp+=heal;b.healReady=false;$("battleMessage").textContent="💚 "+p.name+"はHPを"+heal+"回復！";}
- if(b.enemyHp<=0){b.active=false;const reward=80+Math.floor(Math.random()*121)+Math.floor(fighterPower(p)*1.2);state.coins+=reward;$("battleMessage").textContent="🏆 勝利！ "+e.name+"を倒した！ "+reward+"コイン獲得！";updateBattleUI();save();return;}
+ if(b.enemyHp<=0){b.active=false;if(b.isBoss){state.owned[e.name]=(Number(state.owned[e.name])||0)+1;state.bossClaimed=true;state.bossUnlocked=false;state.coins+=1000;$("battleMessage").textContent="👑 ボス撃破！ ダーク・キングを仲間にした！ 1000コイン獲得！";}else{const reward=80+Math.floor(Math.random()*121)+Math.floor(fighterPower(p)*1.2);state.coins+=reward;finishBattleCount();$("battleMessage").textContent="🏆 勝利！ "+e.name+"を倒した！ "+reward+"コイン獲得！ ("+state.battleCount+"戦目)"+(state.bossUnlocked?" 🚨 次のバトルでボスが出現！":"");}updateBattleUI();save();return;}
  b.turn++;const edmg=7+Math.floor(Math.random()*15)+Math.floor(fighterPower(e)*.14);b.playerHp=Math.max(0,b.playerHp-edmg);
- if(b.playerHp<=0){b.active=false;$("battleMessage").textContent="💫 "+p.name+"は負けてしまった…！ ファイターを選び直して再挑戦しよう。";updateBattleUI();return;}
+ if(b.playerHp<=0){b.active=false;if(b.isBoss){$("battleMessage").textContent="💫 ボスに負けた…！ もう一度挑戦して倒そう！";}else{finishBattleCount();$("battleMessage").textContent="💫 "+p.name+"は負けてしまった…！ ("+state.battleCount+"戦目)"+(state.bossUnlocked?" 🚨 次のバトルでボスが出現！":"")+" ファイターを選び直して再挑戦しよう。";}updateBattleUI();save();return;}
  if(b.turn%2===0)b.skillReady=true;
  $("battleMessage").textContent+=" 相手の反撃！ "+edmg+"ダメージ！";
  updateBattleUI();
