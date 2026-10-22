@@ -321,6 +321,7 @@ function save(){
  render()
 }
 function render(){
+ $("gacha800k").style.display=state.gacha800kUnlocked?"inline-block":"none";
 $("coins").textContent=state.coins;$("gems").textContent=state.gems;$("pulls").textContent=state.pulls;
 $("pity").textContent=state.pity;$("owned").textContent=Object.keys(state.owned).length;
 $("basic").disabled=false;$("super").disabled=false;$("mega").disabled=false;$("chaos").disabled=false;$("chaosCount").textContent="所持数："+(state.chaosDrops||0)+"個";$("chaosOpen").disabled=false;$("chaosOpen").textContent="🌀 カオスドロップを開ける（"+(state.chaosDrops||0)+"個）";$("starr").disabled=false;$("ten").disabled=false;$("epicBox").disabled=false;$("legendBox").disabled=false;$("rainbowBox").disabled=false;
@@ -410,6 +411,7 @@ function pull800k(){
 }
 
 let pendingFighter=null,pendingDuplicate=false;
+$("gacha800k").onclick=pull800k;
 function showResult(f,duplicate){
  $("result").classList.add("show");$("resultFace").innerHTML=fighterArt(f);$("resultName").textContent=f.name;
  $("resultTag").textContent=(f.rarity==="レジェンド"?"🌟 ":"✨ ")+f.rarity+"！";$("resultTag").style.background=f.color;$("resultTag").style.color="#fff";
