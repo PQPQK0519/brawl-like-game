@@ -558,7 +558,7 @@ $("redeemBtn").onclick=()=>{
  if(!rewards[code]){message.style.color="#d9485f";message.textContent="そのコードは使えないよ。コードを確認してね。";return}
  state.redeemedCodes=state.redeemedCodes||{};
  if(state.redeemedCodes[code]&&code!=="やりますねー"){message.style.color="#d9485f";message.textContent="このコードはもう使用済みだよ！";return}
- const reward=rewards[code];state.coins+=reward.coins||0;state.gems+=reward.gems||0;state.chaosDrops=(state.chaosDrops||0)+(reward.chaosDrops||0);if(reward.wasserCheat)state.wasserCheat=true;if(reward.gacha800kUnlocked){state.gacha800kUnlocked=true;$("gacha800k").style.display="inline-block"}state.redeemedCodes[code]=true;
+ const reward=rewards[code];state.coins+=reward.coins||0;state.gems+=reward.gems||0;state.chaosDrops=(state.chaosDrops||0)+(reward.chaosDrops||0);if(reward.wasserCheat)state.wasserCheat=true;if(reward.gacha800kUnlocked){state.gacha800kUnlocked=true;$("gacha800k").style.display="inline-block"}if(reward.hidden100mUnlocked){state.hidden100mUnlocked=true;$("hidden100mGacha").style.display="inline-block"}state.redeemedCodes[code]=true;
  message.style.color="#15975c";message.textContent=reward.text;input.value="";save();
 };
 $("redeemCode").addEventListener("keydown",e=>{if(e.key==="Enter")$("redeemBtn").click()});
