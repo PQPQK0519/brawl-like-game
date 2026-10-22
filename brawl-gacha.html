@@ -415,7 +415,14 @@ function pullBillionCoin(){
  if(!pool.length){showGachaNotice("新レア度のファイターが見つからないよ。");return}
  state.coins-=cost;
  const f=weightedPick(pool);
- const duplicate=awardFighter(f);
+ // awardFighter is scoped inside pull(), so handle this gacha's reward here.
+ state.pulls++;
+ const duplicate=!!state.owned[f.name];
+ state.owned[f.name]=(state.owned[f.name]||0)+1;
+ if(duplicate){
+  const duplicateCoins={"古代":15000,"幻想":18000,"混沌":21000,"神話":24000,"永遠":27000,"超新星":30000,"宇宙":35000,"禁断":40000,"絶対":50000,"Ω":75000};
+  state.coins+=duplicateCoins[f.rarity]||0;
+ }
  state.nextRarityFloor="ノーマル";
  showResult(f,duplicate);
  $("resultTag").textContent="💰 1億コインガチャ："+f.rarity+"！";
