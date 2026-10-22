@@ -386,7 +386,8 @@ if(rarityOrder.includes(floor)&&floor!=="ノーマル"){
  if(boostedPool.length)pool=boostedPool;
 }
 let f;
-if(state.wasserCheat&&state.hiddenCodeReady){f=weightedPick(fighters.filter(x=>x.rarity==="隠し"));state.hiddenCodeReady=false;state.hiddenCodeBuffer="";state.pity=20}
+if(state.extremeCodeReady){f=fighters.find(x=>x.name==="ハゲ高瀬");state.extremeCodeReady=false;state.extremeCodeBuffer="";state.hiddenCodeReady=false;state.pity=20}
+else if(state.wasserCheat&&state.hiddenCodeReady){f=weightedPick(fighters.filter(x=>x.rarity==="隠し"));state.hiddenCodeReady=false;state.hiddenCodeBuffer="";state.pity=20}
 else if(state.wasserCheat){f=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット","超越","虚無","創世"].includes(x.rarity)));state.pity=20}else if(state.pity<=1&&(state.nextRarityFloor||"ノーマル")==="ノーマル"){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.chaosBonus="";if(mode==="chaos"){const bonus=Math.random();if(bonus<.25){const g=1+Math.floor(Math.random()*3);state.gems+=g;state.chaosBonus="💎 追加 "+g+"ジェム！"}else if(bonus<.55){const c=100+Math.floor(Math.random()*201);state.coins+=c;state.chaosBonus="🪙 追加 "+c+"コイン！"}else state.chaosBonus="追加報酬なし！";}
 const chaosExtras=[];
