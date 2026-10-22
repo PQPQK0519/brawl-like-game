@@ -538,7 +538,7 @@ function startFighterBattle(){
  const enemies=fighters.filter(f=>f.name!==name&&f.rarity!=="隠し"&&["レア","エピック","ミシック","レジェンド","ウルトラ","神","シークレット","超越","虚無","創世","古代","幻想","混沌","神話","永遠","超新星","宇宙","禁断","絶対","Ω"].includes(f.rarity));
  const enemy=enemies[Math.floor(Math.random()*enemies.length)]||fighters[0];
  const pPower=fighterPower(player),ePower=fighterPower(enemy);
- battleState={active:true,player,enemy,playerMaxHp:120+pPower*2+(state.owned[name]-1)*8,playerHp:120+pPower*2+(state.owned[name]-1)*8,enemyMaxHp:105+ePower*2,enemyHp:105+ePower*2,turn:0,skillReady:true,healReady:true};
+ battleState={active:true,player,enemy,playerMaxHp:120+pPower*10+(state.owned[name]-1)*8,playerHp:120+pPower*10+(state.owned[name]-1)*8,enemyMaxHp:105+ePower*10,enemyHp:105+ePower*10,turn:0,skillReady:true,healReady:true};
  $("battleMessage").textContent=player.name+"が出撃！ "+enemy.name+"が現れた！ バトル開始！";updateBattleUI();
 }
 function battleAction(kind){
