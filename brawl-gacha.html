@@ -94,7 +94,9 @@
 <header class="top"><div class="logo">⭐ BRAWL <span>GACHA!</span></div><div class="pill">🪙 コイン <span id="coins">500</span></div><div class="pill">💎 ジェム <span id="gems">10</span></div></header>
 <section class="hero"><h1>最強ファイターをゲット！</h1><p>ガチャを引いて、キミだけのチームを作ろう！</p><div class="stats"><div class="stat">👊 所持ファイター <span id="owned">0</span>/18</div><div class="stat">🎟️ ガチャ回数 <span id="pulls">0</span></div><div class="stat">✨ 天井まで <span id="pity">20</span> 回</div></div></section>
 <section class="panel"><h2>🎯 レアリティ</h2><div class="rarities"><div class="rarity common"><b>⚪</b>ノーマル</div><div class="rarity rare"><b>🟢</b>レア</div><div class="rarity epic"><b>🟣</b>エピック</div><div class="rarity mythic"><b>💗</b>ミシック</div><div class="rarity legend"><b>🟡</b>レジェンド</div><div class="rarity ultra cheat-rarity"><b>🔷</b>ウルトラ</div><div class="rarity god cheat-rarity"><b>👑</b>神</div><div class="rarity secret cheat-rarity"><b>👁️</b>シークレット</div><div class="rarity transcendent cheat-rarity"><b>🌠</b>超越</div><div class="rarity void cheat-rarity"><b>🌑</b>虚無</div><div class="rarity genesis cheat-rarity"><b>💠</b>創世</div><div class="rarity secret cheat-rarity"><b>🔐</b>隠し</div></div><p class="drop-note">🔒 ウルトラ以上はチートコード限定！ チート発動後、ガチャ前にキーボードで「12099」と入力すると次のガチャで隠しキャラ確定！</p></section>
-<section class="panel"><h2>🎁 ガチャを選ぼう</h2><div class="crates">
+<section class="panel"><h2>🎁 ガチャを選ぼう</h2><div class="rarity-upgrade" style="margin-top:14px;padding:14px;border:2px solid #d7c5ff;border-radius:16px;background:linear-gradient(135deg,#f2eaff,#fff7d9)">
+<h3 style="margin:0 0 6px;color:#5830a0">✨ 次のガチャのレア度アップ</h3><p style="margin:0 0 10px;font-size:13px;color:#586582">コインを使って、次に引くファイターの最低レア度を指定できるよ！</p>
+<div class="actions" style="margin-top:8px;align-items:center"><select id="rarityFloor" class="battle-select" aria-label="最低レア度を選択" style="min-width:150px"><option value="ノーマル">⚪ ノーマル（無料）</option><option value="レア">🟢 レア（100コイン）</option><option value="エピック">🟣 エピック（300コイン）</option><option value="ミシック">💗 ミシック（800コイン）</option><option value="レジェンド">🟡 レジェンド（2000コイン）</option></select><button class="btn yellow" id="applyRarityFloor">✨ レア度を設定</button></div><p id="rarityFloorMessage" role="status" style="font-weight:800;margin:8px 0 0;color:#5830a0">現在：ノーマル以上</p></div><div class="crates">
 <button class="crate green" id="basic"><span class="emoji">📦</span><span class="name">ノーマル箱</span><small>🪙 100コイン</small></button>
 <button class="crate purple" id="super"><span class="emoji">🎁</span><span class="name">スーパー箱</span><small>💎 3ジェム</small></button>
 <button class="crate orange" id="mega"><span class="emoji">💎</span><span class="name">メガ箱</span><small>🪙 400コイン</small></button>
@@ -292,7 +294,7 @@ const fighters=[
 {name:"銀河の幻獣",face:"🦄",rarity:"レジェンド",desc:"銀河を駆ける幻の獣。",color:"#ff9e24",weight:0.4}
 ];
 const rarityColor={"ノーマル":"#8c9baa","レア":"#22a967","エピック":"#9b55e8","ミシック":"#ed4e8b","レジェンド":"#ff9e24","ウルトラ":"#00e5ff","神":"#ffdf45","シークレット":"#ff3df2","超越":"#b7a2ff","虚無":"#8e44ff","創世":"#ff7bd5","隠し":"#ffffff"};
-let state={coins:500,gems:10,pulls:0,pity:20,owned:{},daily:false,chaosDrops:0,battleReadyAt:0,missionClaimed:false,gemReadyAt:0,redeemedCodes:{},wasserCheat:false,hiddenCodeReady:false,hiddenCodeBuffer:"",gacha800kUnlocked:false};
+let state={coins:500,gems:10,pulls:0,pity:20,owned:{},daily:false,chaosDrops:0,battleReadyAt:0,missionClaimed:false,gemReadyAt:0,redeemedCodes:{},wasserCheat:false,hiddenCodeReady:false,hiddenCodeBuffer:"",gacha800kUnlocked:false,nextRarityFloor:"ノーマル"};
 try{const saved=localStorage.getItem("brawlGachaSave");if(saved)state={...state,...JSON.parse(saved)}}catch(e){}
 let battleState={active:false,player:null,enemy:null,playerHp:0,playerMaxHp:0,enemyHp:0,enemyMaxHp:0,turn:0,skillReady:true,healReady:true};
 
@@ -364,9 +366,16 @@ if(mode==="legendBox")pool=fighters.filter(f=>f.rarity==="レジェンド");
 if(mode==="rainbowBox")pool=fighters.filter(f=>["ミシック","レジェンド"].includes(f.rarity));
 if(mode==="chaos")pool=fighters.filter(f=>["エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="starr"){const roll=Math.random();const target=roll<.48?"ノーマル":roll<.78?"レア":roll<.93?"エピック":roll<.99?"ミシック":"レジェンド";pool=fighters.filter(f=>f.rarity===target)}
+const rarityOrder=["ノーマル","レア","エピック","ミシック","レジェンド"];
+const floor=state.nextRarityFloor||"ノーマル";
+if(rarityOrder.includes(floor)&&floor!=="ノーマル"){
+ const floorIndex=rarityOrder.indexOf(floor);
+ const boostedPool=pool.filter(x=>rarityOrder.indexOf(x.rarity)>=floorIndex);
+ if(boostedPool.length)pool=boostedPool;
+}
 let f;
 if(state.wasserCheat&&state.hiddenCodeReady){f=weightedPick(fighters.filter(x=>x.rarity==="隠し"));state.hiddenCodeReady=false;state.hiddenCodeBuffer="";state.pity=20}
-else if(state.wasserCheat){f=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット","超越","虚無","創世"].includes(x.rarity)));state.pity=20}else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
+else if(state.wasserCheat){f=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット","超越","虚無","創世"].includes(x.rarity)));state.pity=20}else if(state.pity<=1&&(state.nextRarityFloor||"ノーマル")==="ノーマル"){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}else{f=weightedPick(pool);state.pity--}
 state.chaosBonus="";if(mode==="chaos"){const bonus=Math.random();if(bonus<.25){const g=1+Math.floor(Math.random()*3);state.gems+=g;state.chaosBonus="💎 追加 "+g+"ジェム！"}else if(bonus<.55){const c=100+Math.floor(Math.random()*201);state.coins+=c;state.chaosBonus="🪙 追加 "+c+"コイン！"}else state.chaosBonus="追加報酬なし！";}
 const chaosExtras=[];
 function awardFighter(g){state.pulls++;const dup=!!state.owned[g.name];state.owned[g.name]=(state.owned[g.name]||0)+1;if(dup){state.coins+=({"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300,"ウルトラ":500,"神":1000,"シークレット":2500,"超越":4000,"虚無":6000,"創世":10000,"隠し":25000}[g.rarity]||0)}return dup}
@@ -378,6 +387,7 @@ if(mode==="chaos"){
   const dup=awardFighter(extra);chaosExtras.push({fighter:extra,duplicate:dup});
  }
 }
+state.nextRarityFloor="ノーマル";$("rarityFloor").value="ノーマル";$("rarityFloorMessage").textContent="現在：ノーマル以上（次のガチャで使用済み）";
 lastMode=mode;showResult(f,duplicate);
 if(mode==="chaos"){
  $("resultExtra").textContent="🌀 カオスドロップから3体登場！ "+[f,...chaosExtras.map(x=>x.fighter)].map((g,i)=>g.face+g.name+(i===0&&duplicate?"（かぶり）":i>0&&chaosExtras[i-1].duplicate?"（かぶり）":"")).join(" / ")+(state.chaosBonus?"　"+state.chaosBonus:"");
@@ -411,6 +421,17 @@ function pull800k(){
 }
 
 let pendingFighter=null,pendingDuplicate=false;
+$("applyRarityFloor").onclick=()=>{
+ const chosen=$("rarityFloor").value;
+ const prices={"ノーマル":0,"レア":100,"エピック":300,"ミシック":800,"レジェンド":2000};
+ const price=prices[chosen]??0;
+ if(state.coins<price){$("rarityFloorMessage").textContent="コインが足りないよ！ "+price+"コイン必要";return}
+ state.coins-=price;state.nextRarityFloor=chosen;
+ $("rarityFloorMessage").textContent="設定完了！ 次のガチャは「"+chosen+"」以上が確定（"+price+"コイン）";
+ save();
+};
+$("rarityFloor").value=state.nextRarityFloor||"ノーマル";
+$("rarityFloorMessage").textContent="現在："+(state.nextRarityFloor||"ノーマル")+"以上";
 $("gacha800k").onclick=pull800k;
 function showResult(f,duplicate){
  $("result").classList.add("show");$("resultFace").innerHTML=fighterArt(f);$("resultName").textContent=f.name;
