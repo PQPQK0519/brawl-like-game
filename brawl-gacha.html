@@ -557,7 +557,7 @@ $("redeemBtn").onclick=()=>{
  const rewards={"やりますねー":{gacha800kUnlocked:true,text:"🌌 チート解放！「80万連ガチャ」ボタンが出現したよ！"},COIN1000:{coins:1000,text:"🪙 1000コインを獲得！"},GEM10:{gems:10,text:"💎 10ジェムを獲得！"},CHAOS3:{chaosDrops:3,text:"🌀 カオスドロップを3個獲得！"},FREEBOX:{coins:500,gems:5,chaosDrops:1,text:"🎁 500コイン・5ジェム・カオスドロップ1個を獲得！"},"ワッサー":{wasserCheat:true,text:"🔥 チート発動！レア度「ウルトラ・神・シークレット」が解放！毎秒コイン＆ジェムが増え、超高レアも狙える！"},"田所浩二":{wasserCheat:true,text:"🔥 チート発動！レア度「ウルトラ・神・シークレット」が解放！毎秒コイン＆ジェムが増え、超高レアも狙える！"},"インムキング":{wasserCheat:true,hidden100mUnlocked:true,text:"👑 インムキング発動！隠しキャラ限定・1億万連ガチャが解放されたよ！毎秒コイン＆ジェムも増える！"}};
  if(!rewards[code]){message.style.color="#d9485f";message.textContent="そのコードは使えないよ。コードを確認してね。";return}
  state.redeemedCodes=state.redeemedCodes||{};
- if(state.redeemedCodes[code]&&code!=="やりますねー"&&!(code==="インムキング"&&!state.hidden100mUnlocked)){message.style.color="#d9485f";message.textContent="このコードはもう使用済みだよ！";return}
+ if(state.redeemedCodes[code]&&code!=="やりますねー"&&code!=="インムキング"){message.style.color="#d9485f";message.textContent="このコードはもう使用済みだよ！";return}
  const reward=rewards[code];state.coins+=reward.coins||0;state.gems+=reward.gems||0;state.chaosDrops=(state.chaosDrops||0)+(reward.chaosDrops||0);if(reward.wasserCheat)state.wasserCheat=true;if(reward.gacha800kUnlocked){state.gacha800kUnlocked=true;$("gacha800k").style.display="inline-block"}if(reward.hidden100mUnlocked){state.hidden100mUnlocked=true;$("hidden100mGacha").style.display="inline-block"}state.redeemedCodes[code]=true;
  message.style.color="#15975c";message.textContent=reward.text;input.value="";save();
 };
