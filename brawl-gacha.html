@@ -567,8 +567,8 @@ function startFighterBattle(){
 function battleAction(kind){
  if(!battleState.active)return;
  const b=battleState,p=b.player,e=b.enemy;
- if(kind==="attack"){const dmg=12+Math.floor(Math.random()*13)+Math.floor(fighterPower(p)*.18);b.enemyHp=Math.max(0,b.enemyHp-dmg);$("battleMessage").textContent=p.name+"の攻撃！ "+dmg+"ダメージ！";}
- else if(kind==="skill"){if(!b.skillReady)return;const dmg=27+Math.floor(Math.random()*20)+Math.floor(fighterPower(p)*.35);b.enemyHp=Math.max(0,b.enemyHp-dmg);b.skillReady=false;$("battleMessage").textContent="💥 "+p.name+"の必殺技！ "+dmg+"ダメージ！";}
+ if(kind==="attack"){const dmg=p.rarity==="隠し"?999999999:12+Math.floor(Math.random()*13)+Math.floor(fighterPower(p)*.18);b.enemyHp=Math.max(0,b.enemyHp-dmg);$("battleMessage").textContent=p.name+"の攻撃！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 👑 カンスト攻撃！":"");}
+ else if(kind==="skill"){if(!b.skillReady)return;const dmg=p.rarity==="隠し"?999999999:27+Math.floor(Math.random()*20)+Math.floor(fighterPower(p)*.35);b.enemyHp=Math.max(0,b.enemyHp-dmg);b.skillReady=false;$("battleMessage").textContent="💥 "+p.name+"の必殺技！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 🌌 カンスト必殺技！":"");}
  else if(kind==="heal"){if(!b.healReady)return;const heal=Math.min(45+Math.floor(fighterPower(p)*.25),b.playerMaxHp-b.playerHp);b.playerHp+=heal;b.healReady=false;$("battleMessage").textContent="💚 "+p.name+"はHPを"+heal+"回復！";}
  if(b.enemyHp<=0){b.active=false;const reward=80+Math.floor(Math.random()*121)+Math.floor(fighterPower(p)*1.2);state.coins+=reward;$("battleMessage").textContent="🏆 勝利！ "+e.name+"を倒した！ "+reward+"コイン獲得！";updateBattleUI();save();return;}
  b.turn++;const edmg=7+Math.floor(Math.random()*15)+Math.floor(fighterPower(e)*.14);b.playerHp=Math.max(0,b.playerHp-edmg);
