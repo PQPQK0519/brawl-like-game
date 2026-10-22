@@ -560,7 +560,7 @@ document.addEventListener("keydown",e=>{if(!state.wasserCheat||e.ctrlKey||e.altK
 
 
 document.addEventListener("keydown",e=>{if(e.ctrlKey||e.altKey||e.metaKey||e.key.length!==1||!/[0-9]/.test(e.key))return;if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;state.extremeCodeBuffer=(state.extremeCodeBuffer+e.key).slice(-4);if(state.extremeCodeBuffer==="4545"){state.extremeCodeReady=true;const m=$("redeemMessage");if(m)m.textContent="";save()}});
-function fighterPower(f){return ({ "ノーマル":0,"レア":8,"エピック":16,"ミシック":25,"レジェンド":36,"ウルトラ":48,"神":60,"シークレット":72,"超越":85,"虚無":95,"創世":110,"古代":120,"幻想":130,"混沌":140,"神話":150,"永遠":160,"超新星":170,"宇宙":180,"禁断":190,"絶対":200,"Ω":210,"隠し":1000,"極限":999999999}[f.rarity]||0)}
+function fighterPower(f){if(f&&f.name==="ダーク・キング")return 999999999;return ({ "ノーマル":0,"レア":8,"エピック":16,"ミシック":25,"レジェンド":36,"ウルトラ":48,"神":60,"シークレット":72,"超越":85,"虚無":95,"創世":110,"古代":120,"幻想":130,"混沌":140,"神話":150,"永遠":160,"超新星":170,"宇宙":180,"禁断":190,"絶対":200,"Ω":210,"隠し":1000,"極限":999999999}[f.rarity]||0)}
 function startFighterBattle(){
  const name=$("battleFighter").value;if(!name||!state.owned[name]){$("battleMessage").textContent="先にガチャでゲットしたファイターを選んでね！";return}
  state.battleFighterName=name;const player=fighters.find(f=>f.name===name);
@@ -584,11 +584,11 @@ function finishBattleCount(){
 function battleAction(kind){
  if(!battleState.active)return;
  const b=battleState,p=b.player,e=b.enemy;
- if(kind==="attack"){const dmg=p.rarity==="隠し"?999999999:12+Math.floor(Math.random()*13)+Math.floor(fighterPower(p)*.18);b.enemyHp=Math.max(0,b.enemyHp-dmg);$("battleMessage").textContent=p.name+"の攻撃！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 👑 カンスト攻撃！":"");}
- else if(kind==="skill"){if(!b.skillReady)return;const dmg=p.rarity==="隠し"?999999999:27+Math.floor(Math.random()*20)+Math.floor(fighterPower(p)*.35);b.enemyHp=Math.max(0,b.enemyHp-dmg);b.skillReady=false;$("battleMessage").textContent="💥 "+p.name+"の必殺技！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 🌌 カンスト必殺技！":"");}
+ if(kind==="attack"){const dmg=(p.rarity==="隠し"||p.name==="ダーク・キング")?999999999:12+Math.floor(Math.random()*13)+Math.floor(fighterPower(p)*.18);b.enemyHp=Math.max(0,b.enemyHp-dmg);$("battleMessage").textContent=p.name+"の攻撃！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 👑 カンスト攻撃！":"");}
+ else if(kind==="skill"){if(!b.skillReady)return;const dmg=(p.rarity==="隠し"||p.name==="ダーク・キング")?999999999:27+Math.floor(Math.random()*20)+Math.floor(fighterPower(p)*.35);b.enemyHp=Math.max(0,b.enemyHp-dmg);b.skillReady=false;$("battleMessage").textContent="💥 "+p.name+"の必殺技！ "+dmg.toLocaleString()+"ダメージ！"+(p.rarity==="隠し"?" 🌌 カンスト必殺技！":"");}
  else if(kind==="heal"){if(!b.healReady)return;const heal=Math.min(45+Math.floor(fighterPower(p)*.25),b.playerMaxHp-b.playerHp);b.playerHp+=heal;b.healReady=false;$("battleMessage").textContent="💚 "+p.name+"はHPを"+heal+"回復！";}
  if(b.enemyHp<=0){b.active=false;if(b.isBoss){state.owned[e.name]=(Number(state.owned[e.name])||0)+1;state.bossClaimed=true;state.bossUnlocked=false;state.coins+=1000;$("battleMessage").textContent="👑 ボス撃破！ ダーク・キングを仲間にした！ 1000コイン獲得！";}else{const reward=80+Math.floor(Math.random()*121)+Math.floor(fighterPower(p)*1.2);state.coins+=reward;finishBattleCount();$("battleMessage").textContent="🏆 勝利！ "+e.name+"を倒した！ "+reward+"コイン獲得！ ("+state.battleCount+"戦目)"+(state.bossUnlocked?" 🚨 次のバトルでボスが出現！":"");}updateBattleUI();save();return;}
- b.turn++;const edmg=7+Math.floor(Math.random()*15)+Math.floor(fighterPower(e)*.14);b.playerHp=Math.max(0,b.playerHp-edmg);
+ b.turn++;const edmg=p.name==="ダーク・キング"?0:7+Math.floor(Math.random()*15)+Math.floor(fighterPower(e)*.14);b.playerHp=Math.max(0,b.playerHp-edmg);
  if(b.playerHp<=0){b.active=false;if(b.isBoss){$("battleMessage").textContent="💫 ボスに負けた…！ もう一度挑戦して倒そう！";}else{finishBattleCount();$("battleMessage").textContent="💫 "+p.name+"は負けてしまった…！ ("+state.battleCount+"戦目)"+(state.bossUnlocked?" 🚨 次のバトルでボスが出現！":"")+" ファイターを選び直して再挑戦しよう。";}updateBattleUI();save();return;}
  if(b.turn%2===0)b.skillReady=true;
  $("battleMessage").textContent+=" 相手の反撃！ "+edmg+"ダメージ！";
