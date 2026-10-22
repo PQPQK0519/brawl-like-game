@@ -283,7 +283,7 @@ function save(){try{localStorage.setItem("brawlGachaSave",JSON.stringify(state))
 function render(){
 $("coins").textContent=state.coins;$("gems").textContent=state.gems;$("pulls").textContent=state.pulls;
 $("pity").textContent=state.pity;$("owned").textContent=Object.keys(state.owned).length;
-$("basic").disabled=state.coins<100;$("super").disabled=state.gems<3;$("mega").disabled=state.coins<400;$("chaos").disabled=false;$("chaosCount").textContent="所持数："+(state.chaosDrops||0)+"個";$("chaosOpen").disabled=(state.chaosDrops||0)<1;$("chaosOpen").textContent="🌀 カオスドロップを開ける（"+(state.chaosDrops||0)+"個）";$("starr").disabled=state.coins<150;$("ten").disabled=state.coins<900;
+$("basic").disabled=false;$("super").disabled=false;$("mega").disabled=false;$("chaos").disabled=false;$("chaosCount").textContent="所持数："+(state.chaosDrops||0)+"個";$("chaosOpen").disabled=false;$("chaosOpen").textContent="🌀 カオスドロップを開ける（"+(state.chaosDrops||0)+"個）";$("starr").disabled=false;$("ten").disabled=false;$("epicBox").disabled=false;$("legendBox").disabled=false;$("rainbowBox").disabled=false;
 $("daily").disabled=state.daily;$("daily").textContent=state.daily?"✅ 今日のボーナス受取済み":"🎁 無料ボーナスを受け取る";const wait=Math.max(0,Math.ceil(((state.battleReadyAt||0)-Date.now())/1000));$("battleEarn").disabled=wait>0;$("battleEarn").textContent=wait>0?"次のバトルまで "+wait+"秒":"⚔️ バトル開始！";const gemWait=Math.max(0,Math.ceil(((state.gemReadyAt||0)-Date.now())/1000));$("gemEarn").disabled=gemWait>0;$("gemEarn").textContent=gemWait>0?"次の挑戦まで "+gemWait+"秒":"💎 チャレンジする！";$("missionProgress").textContent="進捗："+Math.min(5,state.pulls)+" / 5 回";$("missionClaim").disabled=!!state.missionClaimed||state.pulls<5;$("missionClaim").textContent=state.missionClaimed?"✅ 報酬受取済み":state.pulls<5?"あと "+(5-state.pulls)+" 回で達成":"🎁 300コインを受け取る";
 const battleSelect=$("battleFighter"),previousChoice=state.battleFighterName||battleSelect.value;battleSelect.innerHTML='<option value="">ファイターを選ぼう</option>';fighters.filter(f=>state.owned[f.name]).forEach(f=>{const o=document.createElement("option");o.value=f.name;o.textContent=f.face+" "+f.name+"（"+f.rarity+"）";battleSelect.appendChild(o)});if(previousChoice&&state.owned[previousChoice])battleSelect.value=previousChoice;
 updateBattleUI();
@@ -311,9 +311,10 @@ function fighterArt(f){
 
 function weightedPick(pool){const weight=f=>f.weight*((state.wasserCheat&&["レア","エピック","ミシック","レジェンド","ウルトラ","神","シークレット","超越","虚無","創世"].includes(f.rarity))?99999:1);let total=pool.reduce((s,f)=>s+weight(f),0),n=Math.random()*total;for(const f of pool){n-=weight(f);if(n<=0)return f}return pool[pool.length-1]}
 let lastMode="basic";
+function showGachaNotice(message){const box=$("result");box.classList.add("show");$("resultFace").textContent="💡";$("resultTag").textContent="ガチャのお知らせ";$("resultTag").style.background="#168cf0";$("resultName").textContent=message;$("resultDesc").textContent="コイン・ジェム・カオスドロップの所持数を確認してね。";$("resultExtra").textContent="足りないときは無料ボーナスやチャレンジも使えるよ。";}
 function pull(mode){
 const costs={basic:100,mega:400,starr:150,epicBox:700,rainbowBox:1200};
-if((mode==="super"&&state.gems<3)||(mode==="legendBox"&&state.gems<15))return;if(mode==="chaos"&&(state.chaosDrops||0)<1)return;if(costs[mode]&&state.coins<costs[mode])return;
+if((mode==="super"&&state.gems<3)||(mode==="legendBox"&&state.gems<15)){showGachaNotice(mode==="legendBox"?"ジェムが足りないよ！ レジェンド箱には15ジェム必要だよ。":"ジェムが足りないよ！ スーパーボックスには3ジェム必要だよ。");return}if(mode==="chaos"&&(state.chaosDrops||0)<1){showGachaNotice("カオスドロップがないよ！ 🌀を押してドロップを獲得してね。");return}if(costs[mode]&&state.coins<costs[mode]){showGachaNotice("コインが足りないよ！ 必要："+costs[mode]+"コイン／所持："+state.coins+"コイン");return}
 if(mode==="super")state.gems-=3;else if(mode==="legendBox")state.gems-=15;else if(mode==="chaos")state.chaosDrops--;else if(costs[mode])state.coins-=costs[mode];
 let pool=fighters.filter(f=>["ノーマル","レア","エピック","ミシック","レジェンド"].includes(f.rarity));
 if(mode==="super"||mode==="mega")pool=fighters.filter(f=>["レア","エピック","ミシック","レジェンド"].includes(f.rarity));
