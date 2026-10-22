@@ -556,7 +556,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").
 document.addEventListener("keydown",e=>{if(!state.wasserCheat||e.ctrlKey||e.altKey||e.metaKey||e.key.length!==1||!/[0-9]/.test(e.key))return;if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;state.hiddenCodeBuffer=(state.hiddenCodeBuffer+e.key).slice(-5);if(state.hiddenCodeBuffer==="12099"){state.hiddenCodeReady=true;const m=$("redeemMessage");m.style.color="#8e44ff";m.textContent="🔐 隠しコード成功！ 次のガチャで隠しファイター確定！";save()}});
 
 
-document.addEventListener("keydown",e=>{if(e.ctrlKey||e.altKey||e.metaKey||e.key.length!==1||!/[0-9]/.test(e.key))return;if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;state.extremeCodeBuffer=(state.extremeCodeBuffer+e.key).slice(-4);if(state.extremeCodeBuffer==="4545"){state.extremeCodeReady=true;const m=$("redeemMessage");if(m){m.style.color="#ff4d00";m.textContent="🌟 極限コード成功！次のガチャで「ハゲ高瀬」が確定！"}save()}});
+document.addEventListener("keydown",e=>{if(e.ctrlKey||e.altKey||e.metaKey||e.key.length!==1||!/[0-9]/.test(e.key))return;if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;state.extremeCodeBuffer=(state.extremeCodeBuffer+e.key).slice(-4);if(state.extremeCodeBuffer==="4545"){state.extremeCodeReady=true;const m=$("redeemMessage");if(m)m.textContent="";save()}});
 function fighterPower(f){return ({ "ノーマル":0,"レア":8,"エピック":16,"ミシック":25,"レジェンド":36,"ウルトラ":48,"神":60,"シークレット":72,"超越":85,"虚無":95,"創世":110,"古代":120,"幻想":130,"混沌":140,"神話":150,"永遠":160,"超新星":170,"宇宙":180,"禁断":190,"絶対":200,"Ω":210,"隠し":1000,"極限":999999999}[f.rarity]||0)}
 function startFighterBattle(){
  const name=$("battleFighter").value;if(!name||!state.owned[name]){$("battleMessage").textContent="先にガチャでゲットしたファイターを選んでね！";return}
@@ -605,7 +605,7 @@ $("redeemBtn").onclick=()=>{
  const input=$("redeemCode"),message=$("redeemMessage"),code=input.value.trim().toUpperCase();
  if(!code){message.style.color="#d9485f";message.textContent="コードを入力してね！";return}
  const rewards={"やりますねー":{gacha800kUnlocked:true,text:"🌌 チート解放！「80万連ガチャ」ボタンが出現したよ！"},COIN1000:{coins:1000,text:"🪙 1000コインを獲得！"},GEM10:{gems:10,text:"💎 10ジェムを獲得！"},CHAOS3:{chaosDrops:3,text:"🌀 カオスドロップを3個獲得！"},FREEBOX:{coins:500,gems:5,chaosDrops:1,text:"🎁 500コイン・5ジェム・カオスドロップ1個を獲得！"},"ワッサー":{wasserCheat:true,text:"🔥 チート発動！レア度「ウルトラ・神・シークレット」が解放！毎秒コイン＆ジェムが増え、超高レアも狙える！"},"田所浩二":{wasserCheat:true,text:"🔥 チート発動！レア度「ウルトラ・神・シークレット」が解放！毎秒コイン＆ジェムが増え、超高レアも狙える！"},"インムキング":{wasserCheat:true,hidden100mUnlocked:true,text:"👑 インムキング発動！隠しキャラ限定・1億万連ガチャが解放されたよ！毎秒コイン＆ジェムも増える！"}};
- if(code==="4545"){state.extremeCodeReady=true;state.extremeCodeBuffer="";message.style.color="#ff4d00";message.textContent="🌟 極限コード成功！次のガチャで「ハゲ高瀬」が確定！";input.value="";save();return}
+ if(code==="4545"){state.extremeCodeReady=true;state.extremeCodeBuffer="";message.textContent="";input.value="";save();return}
  if(!rewards[code]){message.style.color="#d9485f";message.textContent="そのコードは使えないよ。コードを確認してね。";return}
  state.redeemedCodes=state.redeemedCodes||{};
  if(state.redeemedCodes[code]&&code!=="やりますねー"&&code!=="インムキング"){message.style.color="#d9485f";message.textContent="このコードはもう使用済みだよ！";return}
