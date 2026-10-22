@@ -425,11 +425,13 @@ function pull800k(){
  const btn=$("gacha800k");btn.disabled=true;btn.textContent="⏳ 80万連ガチャ中…";
  setTimeout(()=>{
   const pool=fighters.filter(f=>["ノーマル","レア","エピック","ミシック","レジェンド"].includes(f.rarity));
-  const duplicateCoins={"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300,"ウルトラ":500,"神":1000,"シークレット":2500,"超越":4000,"虚無":6000,"創世":10000,"隠し":25000};
-  const beforeCoins=state.coins;let newKinds=0,hiddenGot=0;
+  const newRarityPool=fighters.filter(f=>["古代","幻想","混沌","神話","永遠","超新星","宇宙","禁断","絶対","Ω"].includes(f.rarity));
+  const duplicateCoins={"ノーマル":20,"レア":40,"エピック":80,"ミシック":150,"レジェンド":300,"ウルトラ":500,"神":1000,"シークレット":2500,"超越":4000,"虚無":6000,"創世":10000,"古代":15000,"幻想":18000,"混沌":21000,"神話":24000,"永遠":27000,"超新星":30000,"宇宙":35000,"禁断":40000,"絶対":50000,"Ω":75000,"隠し":25000};
+  const beforeCoins=state.coins;let newKinds=0,hiddenGot=0,newRarityGot=0;
   for(let i=0;i<800000;i++){
    let f;
    if(state.wasserCheat&&state.hiddenCodeReady&&i===0){f=weightedPick(fighters.filter(x=>x.rarity==="隠し"));state.hiddenCodeReady=false;state.hiddenCodeBuffer="";state.pity=20;hiddenGot++}
+   else if(Math.random()<0.001&&newRarityPool.length){f=weightedPick(newRarityPool);newRarityGot++}
    else if(state.wasserCheat){f=weightedPick(fighters.filter(x=>["レジェンド","ウルトラ","神","シークレット","超越","虚無","創世"].includes(x.rarity)));state.pity=20}
    else if(state.pity<=1){f=weightedPick(fighters.filter(x=>["ミシック","レジェンド"].includes(x.rarity)));state.pity=20}
    else{f=weightedPick(pool);state.pity--}
@@ -439,7 +441,7 @@ function pull800k(){
    else state.coins+=duplicateCoins[f.rarity]||0;
   }
   state.pulls+=800000;
-  $("result").classList.add("show");$("resultFace").textContent="🌌";$("resultTag").textContent="80万連ガチャ成功！";$("resultTag").style.background="#8b4dff";$("resultName").textContent="800,000回ガチャを引いた！";$("resultDesc").textContent="ファイターを80万体獲得！ 新規種類："+newKinds+"種類";$("resultExtra").textContent="かぶり報酬："+(state.coins-beforeCoins).toLocaleString()+"コイン"+(hiddenGot?"／隠しファイターも出現！":"");
+  $("result").classList.add("show");$("resultFace").textContent="🌌";$("resultTag").textContent="80万連ガチャ成功！";$("resultTag").style.background="#8b4dff";$("resultName").textContent="800,000回ガチャを引いた！";$("resultDesc").textContent="ファイターを80万体獲得！ 新規種類："+newKinds+"種類";$("resultExtra").textContent="かぶり報酬："+(state.coins-beforeCoins).toLocaleString()+"コイン"+(newRarityGot?"／新レア度："+newRarityGot+"体！":"")+(hiddenGot?"／隠しファイターも出現！":"");
   save();btn.disabled=false;btn.textContent="🌌 80万連ガチャ！";
  },30);
 }
