@@ -149,6 +149,7 @@
 
 </main>
 <script>
+const $=id=>document.getElementById(id);
 
 /* Original synthesized arcade-style background music; no external audio files needed. */
 let musicCtx=null,musicTimer=null,musicStep=0,musicEnabled=false;
@@ -294,7 +295,7 @@ const rarityColor={"ノーマル":"#8c9baa","レア":"#22a967","エピック":"#
 let state={coins:500,gems:10,pulls:0,pity:20,owned:{},daily:false,chaosDrops:0,battleReadyAt:0,missionClaimed:false,gemReadyAt:0,redeemedCodes:{},wasserCheat:false,hiddenCodeReady:false,hiddenCodeBuffer:""};
 try{const saved=localStorage.getItem("brawlGachaSave");if(saved)state={...state,...JSON.parse(saved)}}catch(e){}
 let battleState={active:false,player:null,enemy:null,playerHp:0,playerMaxHp:0,enemyHp:0,enemyMaxHp:0,turn:0,skillReady:true,healReady:true};
-const $=id=>document.getElementById(id);
+
 function stateHasProgress(s){return !!s&&(Object.keys(s.owned||{}).length>0||(Number(s.pulls)||0)>0||(Number(s.coins)||0)>500||(Number(s.gems)||0)>10||(Number(s.chaosDrops)||0)>0)}
 function save(){
  try{
