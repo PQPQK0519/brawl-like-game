@@ -333,7 +333,8 @@ function save(){
  render()
 }
 function render(){
- $("gacha800k").style.display=state.gacha800kUnlocked?"inline-block":"none";$("hidden100mGacha").style.display=(state.hidden100mUnlocked&&state.wasserCheat)?"inline-block":"none";
+ if(state.redeemedCodes&&state.redeemedCodes["インムキング"]){state.hidden100mUnlocked=true;state.wasserCheat=true;}
+ $("gacha800k").style.display=state.gacha800kUnlocked?"inline-block":"none";$("hidden100mGacha").style.display=(state.hidden100mUnlocked&&state.wasserCheat)?"inline-block":"none";$("hidden100mGacha").disabled=false;$("hidden100mGacha").style.pointerEvents="auto";$("hidden100mGacha").style.position="relative";$("hidden100mGacha").style.zIndex="2";
 $("coins").textContent=state.coins;$("gems").textContent=state.gems;$("pulls").textContent=state.pulls;
 $("pity").textContent=state.pity;$("owned").textContent=Object.keys(state.owned).length;
 $("basic").disabled=false;$("super").disabled=false;$("mega").disabled=false;$("chaos").disabled=false;$("chaosCount").textContent="所持数："+(state.chaosDrops||0)+"個";$("chaosOpen").disabled=false;$("chaosOpen").textContent="🌀 カオスドロップを開ける（"+(state.chaosDrops||0)+"個）";$("starr").disabled=false;$("ten").disabled=false;$("epicBox").disabled=false;$("legendBox").disabled=false;$("rainbowBox").disabled=false;
@@ -448,7 +449,8 @@ function pull800k(){
 
 
 function pullHidden100m(){
- if(!state.hidden100mUnlocked||!state.wasserCheat)return;
+ if(state.redeemedCodes&&state.redeemedCodes["インムキング"]){state.hidden100mUnlocked=true;state.wasserCheat=true;}
+ if(!state.hidden100mUnlocked||!state.wasserCheat){showGachaNotice("先にシリアルコード「インムキング」を使ってね！");return;}
  const btn=$("hidden100mGacha");
  const hiddenPool=fighters.filter(f=>f.rarity==="隠し");
  if(!hiddenPool.length){showGachaNotice("隠しキャラが見つからないよ。");return}
