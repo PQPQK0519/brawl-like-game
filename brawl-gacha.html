@@ -531,11 +531,11 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("revealOverlay").
 document.addEventListener("keydown",e=>{if(!state.wasserCheat||e.ctrlKey||e.altKey||e.metaKey||e.key.length!==1||!/[0-9]/.test(e.key))return;if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;state.hiddenCodeBuffer=(state.hiddenCodeBuffer+e.key).slice(-5);if(state.hiddenCodeBuffer==="12099"){state.hiddenCodeReady=true;const m=$("redeemMessage");m.style.color="#8e44ff";m.textContent="🔐 隠しコード成功！ 次のガチャで隠しファイター確定！";save()}});
 
 
-function fighterPower(f){return ({ "ノーマル":0,"レア":8,"エピック":16,"ミシック":25,"レジェンド":36,"ウルトラ":48,"神":60,"シークレット":72,"超越":85,"虚無":95,"創世":110,"隠し":125}[f.rarity]||0)}
+function fighterPower(f){return ({ "ノーマル":0,"レア":8,"エピック":16,"ミシック":25,"レジェンド":36,"ウルトラ":48,"神":60,"シークレット":72,"超越":85,"虚無":95,"創世":110,"古代":120,"幻想":130,"混沌":140,"神話":150,"永遠":160,"超新星":170,"宇宙":180,"禁断":190,"絶対":200,"Ω":210,"隠し":1000}[f.rarity]||0)}
 function startFighterBattle(){
  const name=$("battleFighter").value;if(!name||!state.owned[name]){$("battleMessage").textContent="先にガチャでゲットしたファイターを選んでね！";return}
  state.battleFighterName=name;const player=fighters.find(f=>f.name===name);
- const enemies=fighters.filter(f=>f.name!==name&&!["隠し"].includes(f.rarity)&&["レア","エピック","ミシック","レジェンド","ウルトラ","神","シークレット","超越","虚無","創世"].includes(f.rarity));
+ const enemies=fighters.filter(f=>f.name!==name&&f.rarity!=="隠し"&&["レア","エピック","ミシック","レジェンド","ウルトラ","神","シークレット","超越","虚無","創世","古代","幻想","混沌","神話","永遠","超新星","宇宙","禁断","絶対","Ω"].includes(f.rarity));
  const enemy=enemies[Math.floor(Math.random()*enemies.length)]||fighters[0];
  const pPower=fighterPower(player),ePower=fighterPower(enemy);
  battleState={active:true,player,enemy,playerMaxHp:120+pPower*2+(state.owned[name]-1)*8,playerHp:120+pPower*2+(state.owned[name]-1)*8,enemyMaxHp:105+ePower*2,enemyHp:105+ePower*2,turn:0,skillReady:true,healReady:true};
