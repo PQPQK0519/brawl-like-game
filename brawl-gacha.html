@@ -95,8 +95,8 @@
 <section class="hero"><h1>最強ファイターをゲット！</h1><p>ガチャを引いて、キミだけのチームを作ろう！</p><div class="stats"><div class="stat">👊 所持ファイター <span id="owned">0</span>/18</div><div class="stat">🎟️ ガチャ回数 <span id="pulls">0</span></div><div class="stat">✨ 天井まで <span id="pity">20</span> 回</div></div></section>
 <section class="panel"><h2>🎯 レアリティ</h2><div class="rarities"><div class="rarity common"><b>⚪</b>ノーマル</div><div class="rarity rare"><b>🟢</b>レア</div><div class="rarity epic"><b>🟣</b>エピック</div><div class="rarity mythic"><b>💗</b>ミシック</div><div class="rarity legend"><b>🟡</b>レジェンド</div><div class="rarity ultra cheat-rarity"><b>🔷</b>ウルトラ</div><div class="rarity god cheat-rarity"><b>👑</b>神</div><div class="rarity secret cheat-rarity"><b>👁️</b>シークレット</div><div class="rarity transcendent cheat-rarity"><b>🌠</b>超越</div><div class="rarity void cheat-rarity"><b>🌑</b>虚無</div><div class="rarity genesis cheat-rarity"><b>💠</b>創世</div><div class="rarity secret cheat-rarity"><b>🔐</b>隠し</div></div><p class="drop-note">🔒 ウルトラ以上はチートコード限定！ チート発動後、ガチャ前にキーボードで「12099」と入力すると次のガチャで隠しキャラ確定！</p></section>
 <section class="panel"><h2>🎁 ガチャを選ぼう</h2><div class="rarity-upgrade" style="margin-top:14px;padding:14px;border:2px solid #d7c5ff;border-radius:16px;background:linear-gradient(135deg,#f2eaff,#fff7d9)">
-<h3 style="margin:0 0 6px;color:#5830a0">✨ 次のガチャのレア度アップ</h3><p style="margin:0 0 10px;font-size:13px;color:#586582">コインを使って、次に引くファイターの最低レア度を指定できるよ！</p>
-<div class="actions" style="margin-top:8px;align-items:center"><select id="rarityFloor" class="battle-select" aria-label="最低レア度を選択" style="min-width:150px"><option value="ノーマル">⚪ ノーマル（無料）</option><option value="レア">🟢 レア（100コイン）</option><option value="エピック">🟣 エピック（300コイン）</option><option value="ミシック">💗 ミシック（800コイン）</option><option value="レジェンド">🟡 レジェンド（2000コイン）</option></select><button class="btn" id="tapRarity" type="button">👆 タップしてレア度を上げる！</button><button class="btn yellow" id="applyRarityFloor">✨ レア度を設定</button></div><p id="rarityFloorMessage" role="status" style="font-weight:800;margin:8px 0 0;color:#5830a0">現在：ノーマル以上</p></div><div class="crates">
+<h3 style="margin:0 0 6px;color:#5830a0">⭐ スタードロップ風ガチャ</h3><p style="margin:0 0 10px;font-size:13px;color:#586582">開封チャレンジを始めて、ガチャを引く前に何回もタップ！タップごとに確率でレア度アップに挑戦するよ。</p>
+<div class="actions" style="margin-top:8px;align-items:center"><button class="btn" id="startRarityDrop" type="button">🎁 開封チャレンジ</button><button class="btn yellow" id="tapRarity" type="button" disabled>👆 タップして昇格に挑戦</button><button class="btn" id="finishRarityDrop" type="button" disabled>✅ レア度を決定</button></div><p id="rarityFloorMessage" role="status" style="font-weight:800;margin:8px 0 0;color:#5830a0">開封チャレンジを始めよう！</p></div><div class="crates">
 <button class="crate green" id="basic"><span class="emoji">📦</span><span class="name">ノーマル箱</span><small>🪙 100コイン</small></button>
 <button class="crate purple" id="super"><span class="emoji">🎁</span><span class="name">スーパー箱</span><small>💎 3ジェム</small></button>
 <button class="crate orange" id="mega"><span class="emoji">💎</span><span class="name">メガ箱</span><small>🪙 400コイン</small></button>
@@ -387,7 +387,7 @@ if(mode==="chaos"){
   const dup=awardFighter(extra);chaosExtras.push({fighter:extra,duplicate:dup});
  }
 }
-state.nextRarityFloor="ノーマル";$("rarityFloor").value="ノーマル";$("rarityFloorMessage").textContent="現在：ノーマル以上（次のガチャで使用済み）";
+state.nextRarityFloor="ノーマル";$("rarityFloorMessage").textContent="ガチャで使用済み！また開封チャレンジできるよ。";
 lastMode=mode;showResult(f,duplicate);
 if(mode==="chaos"){
  $("resultExtra").textContent="🌀 カオスドロップから3体登場！ "+[f,...chaosExtras.map(x=>x.fighter)].map((g,i)=>g.face+g.name+(i===0&&duplicate?"（かぶり）":i>0&&chaosExtras[i-1].duplicate?"（かぶり）":"")).join(" / ")+(state.chaosBonus?"　"+state.chaosBonus:"");
@@ -422,26 +422,26 @@ function pull800k(){
 
 let pendingFighter=null,pendingDuplicate=false;
 const rarityTapOrder=["ノーマル","レア","エピック","ミシック","レジェンド"];
-const rarityTapPrices={"ノーマル":0,"レア":100,"エピック":300,"ミシック":800,"レジェンド":2000};
-let rarityTapIndex=Math.max(0,rarityTapOrder.indexOf($("rarityFloor").value));
-$("tapRarity").onclick=()=>{
- rarityTapIndex=(rarityTapIndex+1)%rarityTapOrder.length;
- const chosen=rarityTapOrder[rarityTapIndex];
- $("rarityFloor").value=chosen;
- $("rarityFloorMessage").textContent="👆 タップ！ レア度："+chosen+"以上（設定には"+rarityTapPrices[chosen]+"コイン）";
- $("rarityFloorMessage").style.color="#8b35c9";
+let rarityDropActive=false,rarityTapIndex=0;
+const rarityUpgradeChance=[0,0.5,0.25,0.1,0.05];
+$("startRarityDrop").onclick=()=>{
+ rarityDropActive=true;rarityTapIndex=0;state.nextRarityFloor="ノーマル";
+ $("tapRarity").disabled=false;$("finishRarityDrop").disabled=false;$("startRarityDrop").disabled=true;
+ $("rarityFloorMessage").textContent="⭐ ノーマルからスタート！タップするたびに昇格抽選！";
 };
-$("applyRarityFloor").onclick=()=>{
- const chosen=$("rarityFloor").value;
- const prices={"ノーマル":0,"レア":100,"エピック":300,"ミシック":800,"レジェンド":2000};
- const price=prices[chosen]??0;
- if(state.coins<price){$("rarityFloorMessage").textContent="コインが足りないよ！ "+price+"コイン必要";return}
- state.coins-=price;state.nextRarityFloor=chosen;
- $("rarityFloorMessage").textContent="設定完了！ 次のガチャは「"+chosen+"」以上が確定（"+price+"コイン）";
+$("tapRarity").onclick=()=>{
+ if(!rarityDropActive)return;
+ if(rarityTapIndex>=4){$("rarityFloorMessage").textContent="👑 最高レア度！レジェンドに到達したよ！";return}
+ const chance=rarityUpgradeChance[rarityTapIndex+1];
+ if(Math.random()<chance){rarityTapIndex++;state.nextRarityFloor=rarityTapOrder[rarityTapIndex];$("rarityFloorMessage").textContent="🎉 昇格成功！ "+state.nextRarityFloor+"！さらにタップして挑戦できるよ。";}
+ else{$("rarityFloorMessage").textContent="💫 昇格失敗… "+rarityTapOrder[rarityTapIndex]+"のまま！もう一度タップ！";}
  save();
 };
-$("rarityFloor").value=state.nextRarityFloor||"ノーマル";
-$("rarityFloorMessage").textContent="現在："+(state.nextRarityFloor||"ノーマル")+"以上";
+$("finishRarityDrop").onclick=()=>{
+ if(!rarityDropActive)return;
+ rarityDropActive=false;$("tapRarity").disabled=true;$("finishRarityDrop").disabled=true;$("startRarityDrop").disabled=false;
+ $("rarityFloorMessage").textContent="決定！次のガチャは「"+state.nextRarityFloor+"」以上が出るよ。ガチャを引こう！";save();
+};
 $("gacha800k").onclick=pull800k;
 function showResult(f,duplicate){
  $("result").classList.add("show");$("resultFace").innerHTML=fighterArt(f);$("resultName").textContent=f.name;
